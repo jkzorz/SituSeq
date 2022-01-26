@@ -8,7 +8,7 @@ Code backup:
 
 conda activate longread_umi
 
-
+'''
 cd /home/jackie/anaconda3/longread_umi
 
 #combine all fastq sequences into one file
@@ -79,3 +79,4 @@ blastn -query Take2_1000-1600_centroids70_singleline.fasta -db Indicator_species
 
 ####can use windows subsystem for linux
 Activate wsl by opening windows powershell and typing: wsl
+'''
