@@ -5,18 +5,15 @@ Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec 
 ## Install windows subsystem for linux 
 Install windows subsystem for linux (wsl) and open from the 
 
-## Install conda for windows 
-Install anaconda prompt for windows (link)
 
-Open Anaconda prompt and install *cutadapt* (link)
+
+Open wsl and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/)
 
 
 ```
-conda create -n cutadapt
 
-conda install -c bioconda cutadapt
 
-#worked on wsl
+#worked on wsl 
 python3 -m pip install --user --upgrade cutadapt
 
 
