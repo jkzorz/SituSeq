@@ -16,6 +16,7 @@ Open wsl and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/)
 #worked on wsl 
 python3 -m pip install --user --upgrade cutadapt
 
+```
 
 ## Install local Blast (for windows)
 
