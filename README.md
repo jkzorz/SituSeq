@@ -1,6 +1,16 @@
 # Seaquencing
-workflows for offline analysis of 16S rRNA Nanopore data
+Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec **windows 10** laptop 
 
+
+## Install windows subsystem for linux 
+Install windows subsystem for linux (wsl) and open from the 
+
+## Install local Blast (for windows)
+
+Follow this link and select the *win64.exe* option for download:
+https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
+
+Once downloaded, run the application to finish the installation.
 
 
 Code backup:
