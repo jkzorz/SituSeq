@@ -12,6 +12,19 @@ https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
 
 Once downloaded, run the application to finish the installation.
 
+Make blast database with sequences of interest
+
+```
+makeblastdb -in Indicator_species_forDB_Carmen.fasta -out Indicator_species_forDB_Carmen -dbtype nucl
+```
+
+Run Blastn with Nanopore 16S sequences as queries and sequences of interest as database
+
+```
+blastn -query Take2_1000-1600_centroids70_singleline.fasta -db Indicator_species_forDB_Carmen -outfmt 6 -out Take2_indicator_species_blast.tbl -max_target_seqs 1
+```
+
+
 
 Code backup:
 #longread UMI protocol 
