@@ -3,17 +3,15 @@ Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec 
 
 
 ## Install windows subsystem for linux 
-Install windows subsystem for linux (wsl) and open from the 
+Install windows subsystem for linux (wsl) and open from windows power shell
 
 
 
-Open wsl and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/)
+Open wsl and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/) 
 
 
 ```
-
-
-#worked on wsl 
+#install using pip
 python3 -m pip install --user --upgrade cutadapt
 
 ```
@@ -25,16 +23,16 @@ https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
 
 Once downloaded, run the application to finish the installation.
 
-Make blast database with sequences of interest
+Make blast database with sequences of interest:
 
 ```
-makeblastdb -in Indicator_species_forDB_Carmen.fasta -out Indicator_species_forDB_Carmen -dbtype nucl
+makeblastdb -in sequences_of_interest.fasta -out custom_DB -dbtype nucl
 ```
 
 Run Blastn with Nanopore 16S sequences as queries and sequences of interest as database
 
 ```
-blastn -query Take2_1000-1600_centroids70_singleline.fasta -db Indicator_species_forDB_Carmen -outfmt 6 -out Take2_indicator_species_blast.tbl -max_target_seqs 1
+blastn -query nanopore_16S.fasta -db custom_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1
 ```
 
 
