@@ -33,6 +33,8 @@ Run Blastn with Nanopore 16S sequences as queries and sequences of interest as d
 
 ```
 blastn -query nanopore_16S.fasta -db custom_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1
+
+#address: -max_target_seqs 1 simply returns the first good hit found in the database, not the best hit as one would assume
 ```
 
 
