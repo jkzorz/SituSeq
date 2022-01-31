@@ -7,7 +7,7 @@ Install windows subsystem for linux (wsl) and open from windows power shell
 
 
 
-Open wsl and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/) 
+Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/) 
 
 
 ```
