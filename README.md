@@ -16,6 +16,17 @@ python3 -m pip install --user --upgrade cutadapt
 
 ```
 
+
+Install NanoFilt (https://github.com/wdecoster/nanofilt)
+
+```
+pip install nanofilt
+
+
+NanoFilt -h
+```
+
+
 ## Install local Blast (for windows)
 
 Follow this link and select the *win64.exe* option for download:
