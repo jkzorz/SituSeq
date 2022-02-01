@@ -129,4 +129,14 @@ blastn -query Take2_1000-1600_centroids70_singleline.fasta -db Indicator_species
 
 ####can use windows subsystem for linux
 Activate wsl by opening windows powershell and typing: wsl
+
+
+###assign taxonomy in R using dada2
+fast = read.csv("Take2_28July2021_clustered70_singleline.fasta", header = FALSE, sep = ">" )
+fast1 = as.data.frame(fast[,1]) 
+new_fast = fast1[seq(2, nrow(fast1), 2), ]
+new_fastv = as.vector(new_fast)
+
+take2_tax_rc_132 = assignTaxonomy(new_fastv, "../silva_nr_v132_train_set.fa.gz", multithread=FALSE, tryRC = TRUE)
+
 ```
