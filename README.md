@@ -132,6 +132,7 @@ Activate wsl by opening windows powershell and typing: wsl
 
 
 ###assign taxonomy in R using dada2
+set.seed(100) # Initialize random number generator for reproducibility
 fast = read.csv("Take2_28July2021_clustered70_singleline.fasta", header = FALSE, sep = ">" )
 fast1 = as.data.frame(fast[,1]) 
 new_fast = fast1[seq(2, nrow(fast1), 2), ]
