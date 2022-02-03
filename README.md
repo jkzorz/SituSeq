@@ -68,14 +68,14 @@ Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/prod
 ```
 #install tidyverse
 install.packages("tidyverse")
-library(tidyverse)
+
 
 #install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
 if (!requireNamespace("BiocManager", quietly = TRUE))
 install.packages("BiocManager")
 BiocManager::install("dada2", version = "3.14")
 
-library(dada2)
+
 
 ```
 
@@ -118,9 +118,25 @@ awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}
 
 ```
 
+## Step 2: Import data into R 
 
+```
+#load required libraries
+library(tidyverse)
+library(dada2)
 
+#Initialize random number generator for reproducibility
+set.seed(100) 
 
+#read in trimmed and filtered sequences
+seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
+
+#assign taxonomy with silva database, change location of database to match location in your machine
+#this step will take a while, possibility to subset sequences  
+#include tryRC parameter to account for sequences being read back to front by nanopore
+tax_rc = assignTaxonomy(seqs, "../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
+
+```
 
 # Code backup:
 #longread UMI protocol 
