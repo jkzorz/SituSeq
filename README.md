@@ -11,7 +11,7 @@ Before running the workflow offline, the following programs need to be installed
 5. Optional: taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
 
 
-*something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes? 
+*something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes?* 
 
 ## Install windows subsystem for linux 
 Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell
@@ -23,7 +23,6 @@ Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cut
 python3 -m pip install --user --upgrade cutadapt
 
 ```
-
 
 Install NanoFilt (https://github.com/wdecoster/nanofilt)
 
@@ -58,6 +57,61 @@ blastn -query nanopore_16S.fasta -db custom_DB -outfmt 6 -out blast_results.tbl 
 
 ```
 blast-qc: https://environmentalmicrobiome.biomedcentral.com/articles/10.1186/s40793-020-00361-y
+
+
+
+
+## Install R, R-Studio, and packages
+
+Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/products/rstudio/download/#download) and load *dada2* and *tidyverse* packages
+
+```
+#install tidyverse
+install.packages("tidyverse")
+library(tidyverse)
+
+#install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("dada2", version = "3.14")
+
+library(dada2)
+
+```
+
+
+# Analysis Workflow
+
+*at what point are we splitting reads into samples based on barcodes? First I assume?* 
+
+## Step 0: Concatenate all individual fastq files belonging to one sample into one file (may need to write for loop for barcodes?)  
+
+``` 
+cat *.fastq > concat.fastq
+```
+
+## Step 1: Filter reads by length 
+
+Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can be run from a linux system, or if using a windows operating system, through windows subsystem for linux (wsl). Using a filter cutoff of between 1350 bp and 1650 bp.  
+
+*need to decide if using the actual primer sequence, or just cutting off the number of base pairs?* 
+
+```
+#cutadapt 
+
+#remove first 100 bps - change '-u' parameter to primer length
+cutadapt -u 100 -o concat_trim1.fastq concat.fastq
+
+#remove last 100 bps - change '-u' paramater to primer length
+cutadapt -u -100 -o concat_trim2.fastq concat_trim1.fastq
+
+
+#filter out reads that are less than 1350 bp or more than 1650 bp - need to determine optimum lengths... 
+cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq 
+
+```
+
+
 
 
 
