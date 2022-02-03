@@ -111,7 +111,7 @@ cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq
 
 
 #change fastq to fasta file with this code: 
-awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' concat_trimmed_1200-1600.fasta > concat_trimmed_1200-1600_singleline.fasta
+sed -n '1~4s/^@/>/p;2~4p' concat_trimmed_1200-1600.fastq > concat_trimmed_1200-1600.fasta
 
 #convert fasta file into a single line fasta file (this is not necessary if your fasta files are already in single line format)
 awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' concat_trimmed_1200-1600.fasta > concat_trimmed_1200-1600_singleline.fasta
@@ -122,7 +122,7 @@ awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}
 
 
 
-Code backup:
+# Code backup:
 #longread UMI protocol 
 
 conda activate longread_umi
