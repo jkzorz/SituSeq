@@ -1,14 +1,22 @@
 # Seaquencing
 Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec **windows 10** laptop 
 
+# Installation 
+Before running the workflow offline, the following programs need to be installed: 
+
+1. Windows substem for linux (wsl)
+2. cutadapt/or NanoFilt?
+3. blast
+4. Rstudio and packages *dada2* and *tidyverse* 
+5. Optional: taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
+
+
+*something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes? 
 
 ## Install windows subsystem for linux 
-Install windows subsystem for linux (wsl) and open from windows power shell
-
-
+Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell
 
 Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/) 
-
 
 ```
 #install using pip
