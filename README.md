@@ -90,7 +90,7 @@ awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}
 
 ```
 
-## Step 2: Import data into R 
+## Step 2: Import data into R and assign taxonomy
 
 ```
 #load required libraries
