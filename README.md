@@ -107,6 +107,7 @@ tax_rc = assignTaxonomy(seqs, "../silva_nr99_v138.1_train_set.fa.gz", multithrea
 #out of 500 sequences, 16 (3.2%) had NA at kingdom level, 117 (23%) had NA at phylum level, 21 different phyla
 #out of 500 sequences with no "RC", 32 had NA at kingdom level, 249 had NA at phylum level
 
+
 #optional step to write taxonomy to csv
 write.csv(tax_rc, "tax.csv")
 
