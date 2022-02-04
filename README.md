@@ -133,10 +133,50 @@ seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
 
 #assign taxonomy with silva database, change location of database to match location in your machine
 #this step will take a while, possibility to subset sequences  
-#include tryRC parameter to account for sequences being read back to front by nanopore
+#include tryRC parameter to account for sequences being read in opposite direction by nanopore
 tax_rc = assignTaxonomy(seqs, "../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 
+#out of 100 sequences, 5 had NA at kingdom level, 18 had NA at phylum level, 15 different phyla 
+#out of 500 sequences, 16 (3.2%) had NA at kingdom level, 117 (23%) had NA at phylum level, 21 different phyla
+#out of 500 sequences with no "RC", 32 had NA at kingdom level, 249 had NA at phylum level
+
+#optional step to write taxonomy to csv
+write.csv(tax_rc, "tax.csv")
+
+tax_df = as.data.frame(tax_rc) 
+
+
 ```
+
+
+## Step 3: Visualize results 
+
+```
+#Keep only Bacteria 
+tax_df2 = tax_df2 %>% filter(Kingdom == "Bacteria")
+
+#Retrieve total number of sequences for relative abundance calculations
+#total = nrow(tax_df2)
+
+#Summarize at Phylum level
+phylum = tax_df2 %>% group_by(Phylum) %>% summarise(n = n())
+
+#Calculate relative abundance
+phylum$abund = (phylum$n)/(colSums(as.matrix(phylum$n)))*100
+
+#Plot 
+gg = ggplot(phylum, aes(y = Phylum, x = abund)) + 
+    geom_point(aes(size = abund, colour = abund)) + 
+    labs(x = "Relative Abundance (%)", y = "", size = "", colour = "Relative Abundance (%)") + 
+    theme(legend.position = "top", legend.key = element_blank(), 
+    panel.border = element_rect(fill = NA, colour = "grey80"), 
+    panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"), 
+    legend.title = element_text(size = 10))
+
+
+```
+
+
 
 # Code backup:
 #longread UMI protocol 
