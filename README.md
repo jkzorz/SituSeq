@@ -1,11 +1,11 @@
-# Seaquencing
+# Se(a)quencing
 Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec **windows 10** laptop 
 
 # Installation 
 Before running the workflow offline, the following programs need to be installed: 
 
 1. Windows substem for linux (wsl)
-2. cutadapt/or NanoFilt?
+2. cutadapt
 3. blast
 4. Rstudio and packages *dada2* and *tidyverse* 
 5. Optional: taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
@@ -14,23 +14,17 @@ Before running the workflow offline, the following programs need to be installed
 *something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes?* 
 
 ## Install windows subsystem for linux 
-Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell
+Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell by entering ```wsl```
+ 
 
-Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/) 
+## Install cutadapt 
+Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/)
+*do you need to install python as well, I can't remember...*
 
 ```
-#install using pip
+#install cutadapt using pip
 python3 -m pip install --user --upgrade cutadapt
 
-```
-
-Install NanoFilt (https://github.com/wdecoster/nanofilt)
-
-```
-pip install nanofilt
-
-
-NanoFilt -h
 ```
 
 
@@ -40,24 +34,6 @@ Follow this link and select the *win64.exe* option for download:
 https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
 
 Once downloaded, run the application to finish the installation.
-
-Make blast database with sequences of interest:
-
-```
-makeblastdb -in sequences_of_interest.fasta -out custom_DB -dbtype nucl
-```
-
-Run Blastn with Nanopore 16S sequences as queries and sequences of interest as database
-
-```
-blastn -query nanopore_16S.fasta -db custom_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1
-
-#address: -max_target_seqs 1 simply returns the first good hit found in the database, not the best hit as one would assume. Also depends on db order
-#potentially can increase threshold in order to make sure best hit is found 
-
-```
-blast-qc: https://environmentalmicrobiome.biomedcentral.com/articles/10.1186/s40793-020-00361-y
-
 
 
 
@@ -69,13 +45,10 @@ Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/prod
 #install tidyverse
 install.packages("tidyverse")
 
-
 #install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
 if (!requireNamespace("BiocManager", quietly = TRUE))
 install.packages("BiocManager")
 BiocManager::install("dada2", version = "3.14")
-
-
 
 ```
 
@@ -85,6 +58,7 @@ BiocManager::install("dada2", version = "3.14")
 *at what point are we splitting reads into samples based on barcodes? First I assume?* 
 
 ## Step 0: Concatenate all individual fastq files belonging to one sample into one file (may need to write for loop for barcodes?)  
+Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
 
 ``` 
 cat *.fastq > concat.fastq
@@ -94,7 +68,7 @@ cat *.fastq > concat.fastq
 
 Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can be run from a linux system, or if using a windows operating system, through windows subsystem for linux (wsl). Using a filter cutoff of between 1350 bp and 1650 bp.  
 
-*need to decide if using the actual primer sequence, or just cutting off the number of base pairs?* 
+*need to decide if using the actual primer sequence, or just cutting off the number of base pairs? Also need to optimize filtering length* 
 
 ```
 #cutadapt 
@@ -105,10 +79,8 @@ cutadapt -u 100 -o concat_trim1.fastq concat.fastq
 #remove last 100 bps - change '-u' paramater to primer length
 cutadapt -u -100 -o concat_trim2.fastq concat_trim1.fastq
 
-
 #filter out reads that are less than 1350 bp or more than 1650 bp - need to determine optimum lengths... 
 cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq 
-
 
 #change fastq to fasta file with this code: 
 sed -n '1~4s/^@/>/p;2~4p' concat_trimmed_1200-1600.fastq > concat_trimmed_1200-1600.fasta
@@ -143,15 +115,15 @@ tax_rc = assignTaxonomy(seqs, "../silva_nr99_v138.1_train_set.fa.gz", multithrea
 #optional step to write taxonomy to csv
 write.csv(tax_rc, "tax.csv")
 
-tax_df = as.data.frame(tax_rc) 
-
-
 ```
 
 
 ## Step 3: Visualize results 
 
 ```
+#Convert taxonomy matrix into a data frame
+tax_df = as.data.frame(tax_rc) 
+
 #Keep only Bacteria 
 tax_df2 = tax_df2 %>% filter(Kingdom == "Bacteria")
 
@@ -174,6 +146,25 @@ gg = ggplot(phylum, aes(y = Phylum, x = abund)) +
 ggsave("tax_500_test.png", height = 5.5, width = 7.5)
 
 ```
+
+## Additional Blast search against custom database
+
+Make blast database with sequences of interest:
+
+```
+makeblastdb -in sequences_of_interest.fasta -out custom_DB -dbtype nucl
+```
+
+Run Blastn with Nanopore 16S sequences as queries and sequences of interest as database
+
+```
+blastn -query nanopore_16S.fasta -db custom_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1
+
+#address: -max_target_seqs 1 simply returns the first good hit found in the database, not the best hit as one would assume. Also depends on db order
+#potentially can increase threshold in order to make sure best hit is found 
+
+```
+blast-qc: https://environmentalmicrobiome.biomedcentral.com/articles/10.1186/s40793-020-00361-y
 
 
 
@@ -264,4 +255,14 @@ new_fastv = as.vector(new_fast)
 
 take2_tax_rc_132 = assignTaxonomy(new_fastv, "../silva_nr_v132_train_set.fa.gz", multithread=FALSE, tryRC = TRUE)
 
+```
+
+
+Install NanoFilt (https://github.com/wdecoster/nanofilt)
+
+```
+pip install nanofilt
+
+
+NanoFilt -h
 ```
