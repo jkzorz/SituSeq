@@ -10,6 +10,7 @@ Before running the workflow offline, the following programs need to be installed
 4. Rstudio and packages *dada2* and *tidyverse* 
 5. Optional: taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
 
+*potential to run cutadapt filter and trim step from r using dada2 filterandtrim command - possibility to only take one read, to trim from front and back, and to filter based on length*
 
 *something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes?* 
 
