@@ -155,16 +155,13 @@ tax_df = as.data.frame(tax_rc)
 #Keep only Bacteria 
 tax_df2 = tax_df2 %>% filter(Kingdom == "Bacteria")
 
-#Retrieve total number of sequences for relative abundance calculations
-#total = nrow(tax_df2)
-
 #Summarize at Phylum level
 phylum = tax_df2 %>% group_by(Phylum) %>% summarise(n = n())
 
 #Calculate relative abundance
 phylum$abund = (phylum$n)/(colSums(as.matrix(phylum$n)))*100
 
-#Plot 
+#Plot as scatter/bubble plot 
 gg = ggplot(phylum, aes(y = Phylum, x = abund)) + 
     geom_point(aes(size = abund, colour = abund)) + 
     labs(x = "Relative Abundance (%)", y = "", size = "", colour = "Relative Abundance (%)") + 
@@ -173,6 +170,8 @@ gg = ggplot(phylum, aes(y = Phylum, x = abund)) +
     panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"), 
     legend.title = element_text(size = 10))
 
+#Save file
+ggsave("tax_500_test.png", height = 5.5, width = 7.5)
 
 ```
 
