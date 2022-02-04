@@ -83,6 +83,9 @@ cutadapt -u -100 -o concat_trim2.fastq concat_trim1.fastq
 #filter out reads that are less than 1350 bp or more than 1650 bp - need to determine optimum lengths... 
 cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq 
 
+#Possible to do with dada2, although using minLen ended up removing all reads? Maybe a bug? 
+out = filterAndTrim('apt_103_test1.fastq', 'aptseqs_trim_dada2.fastq', minLen = 600, maxLen = 1800, trimLeft = 100, trimRight = 100)
+
 ```
 
 ## Step 2: Import data into R and assign taxonomy
@@ -121,7 +124,7 @@ write.csv(tax_rc, "tax.csv")
 tax_df = as.data.frame(tax_rc) 
 
 #Keep only Bacteria 
-tax_df2 = tax_df2 %>% filter(Kingdom == "Bacteria")
+tax_df2 = tax_df %>% filter(Kingdom == "Bacteria")
 
 #Summarize at Phylum level
 phylum = tax_df2 %>% group_by(Phylum) %>% summarise(n = n())
@@ -137,6 +140,7 @@ gg = ggplot(phylum, aes(y = Phylum, x = abund)) +
     panel.border = element_rect(fill = NA, colour = "grey80"), 
     panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"), 
     legend.title = element_text(size = 10))
+gg
 
 #Save file
 ggsave("tax_500_test.png", height = 5.5, width = 7.5)
