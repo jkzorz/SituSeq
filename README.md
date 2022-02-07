@@ -1,14 +1,20 @@
 # Se(a)quencing
-Workflows for offline analysis of 16S rRNA Nanopore data. Using a standard spec **windows 10** laptop 
+The goal of these workflows is to enable the easiest and fastest possible offline analysis of micrbiome data without sacrificing accuracy. Designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop (**windows 10?**) 
 
 # Installation 
-Before running the workflow offline, the following programs need to be installed: 
+Before running the workflows offline, the following programs need to be installed. Note there is overlap in software between stream 1 and stream 2 analyses. 
 
+### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
+1. Windows substem for linux (wsl)
+2. cutadapt
+3. R, Rstudio, and packages *dada2* and *tidyverse* 
+4. Taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
+
+### Stream 2: Blast sequences against custom database
 1. Windows substem for linux (wsl)
 2. cutadapt
 3. blast
-4. Rstudio and packages *dada2* and *tidyverse* 
-5. Optional: taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
+4. Optional: R, Rstudio, and package *tidyverse* for visualization of blast results 
 
 *potential to run cutadapt filter and trim step from r using dada2 filterandtrim command - possibility to only take one read, to trim from front and back, and to filter based on length*
 
