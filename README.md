@@ -115,6 +115,8 @@ tax_rc = assignTaxonomy(seqs, "../silva_nr99_v138.1_train_set.fa.gz", multithrea
 #out of 100 sequences, 5 had NA at kingdom level, 18 had NA at phylum level, 15 different phyla 
 #out of 500 sequences, 16 (3.2%) had NA at kingdom level, 117 (23%) had NA at phylum level, 21 different phyla
 #out of 500 sequences with no "RC", 32 had NA at kingdom level, 249 had NA at phylum level
+#using Carmen's mock community, out of 1000 sequences, 0 had NA at phylum and kingdom levels! 
+#seems that NA in sediment samples are caused by rarer taxa
 
 
 #optional step to write taxonomy to csv
