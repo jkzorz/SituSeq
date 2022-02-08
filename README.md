@@ -92,6 +92,8 @@ cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq
 #Possible to do with dada2, although using minLen ended up removing all reads? Maybe a bug? 
 #it was issue with "truncQ" parameter. It is optional, but automatically defaults to 2, which ended up truncating most of the reads way too soon... need to add truncQ=0 in #order to avoid this
 out = filterAndTrim('apt_103_test1.fastq', 'aptseqs_trim_dada2.fastq', minLen = 600, maxLen = 1800, trimLeft = 100, trimRight = 100, truncQ = 0)
+#another example:
+ out = filterAndTrim(fwd = '../../CLI_Nanopore_test/CLI_nanopore_test.fastq', filt =  'cliseqs_trunc_test_dada2.fastq', trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
 
 ```
 
