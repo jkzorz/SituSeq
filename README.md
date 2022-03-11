@@ -62,17 +62,14 @@ BiocManager::install("dada2", version = "3.14")
 
 # Analysis Workflow
 
-*at what point are we splitting reads into samples based on barcodes? First I assume?* 
+## One sample:
+If you only have one sample follow these steps. If you have multiple barcoded samples follow the steps below. 
 
-## Step 0: Concatenate all individual fastq files belonging to one sample into one file (may need to write for loop for barcodes?)  
+## Step 0: Concatenate all individual fastq files belonging to one sample into one file   
 Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
 
 ``` 
-#for one sample
 cat *.fastq > concat.fastq
-
-#for multiple barcodes
-for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
 ```
 
 ## Step 1: Filter reads by length 
@@ -161,6 +158,20 @@ gg
 ggsave("tax_500_test.png", height = 5.5, width = 7.5)
 
 ```
+
+## Multiple samples 
+
+## Step 0: Concatenate all individual fastq files belonging to one sample into one file  
+Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
+
+```
+for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
+```
+
+## Step 1:  Filter reads by length 
+
+
+
 
 ## Additional Blast search against custom database
 
