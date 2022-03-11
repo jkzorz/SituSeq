@@ -76,6 +76,8 @@ cat *.fastq > concat.fastq
 
 Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can be run from a linux system, or if using a windows operating system, through windows subsystem for linux (wsl). Using a filter cutoff of between 1350 bp and 1650 bp.  
 
+*can we use nanopore basecalling to remove barcodes and primers?*
+
 *need to decide if using the actual primer sequence, or just cutting off the number of base pairs? Also need to optimize filtering length* 
 
 ```
