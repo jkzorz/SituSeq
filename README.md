@@ -78,6 +78,8 @@ Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can
 
 *can we use nanopore basecalling to remove barcodes and primers?*
 
+*barcdoe seems to be ~83-87 bp based on blast hits, don't know if this also includes primer or not*
+
 *need to decide if using the actual primer sequence, or just cutting off the number of base pairs? Also need to optimize filtering length* 
 
 ```
