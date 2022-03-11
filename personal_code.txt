@@ -1,0 +1,4 @@
+# Open powershell and type 'wsl' 
+
+#change directory
+cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass/
