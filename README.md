@@ -68,7 +68,11 @@ BiocManager::install("dada2", version = "3.14")
 Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
 
 ``` 
+#for one sample
 cat *.fastq > concat.fastq
+
+#for multiple barcodes
+for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
 ```
 
 ## Step 1: Filter reads by length 
