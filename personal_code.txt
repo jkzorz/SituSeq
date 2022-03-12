@@ -5,5 +5,10 @@ cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Ana
 #concatenate files 
 for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
 
+#unzip files - don't know if this is necessary
+for i in *.fastq.gz; do gunzip $i; done
+
 #in R
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass")
+
+
