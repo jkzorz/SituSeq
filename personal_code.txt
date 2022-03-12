@@ -10,5 +10,45 @@ for i in *.fastq.gz; do gunzip $i; done
 
 #in R
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass")
+library(dada2)
+library(tidyverse)
+
+#save path to object
+path = getwd()
+
+#Forward and fastq filenames have format: 
+#barcode01_cat.fastq 
+fnFs = sort(list.files(path, pattern="_cat.fastq.gz", full.names = TRUE))
+
+#Extract sample names, assuming filenames have format: #samplename_XXX.fastq.gz
+sample.names = sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+
+
+#filter and trim reads- create new paths for new files 
+filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
+names(filtFs) = sample.names
+
+#filter and trim command - compress true or false?
+out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
+#see how many reads were lost
+head(out) 
+
+#can see distribution of sequence read lengths: 
+table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
+plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
+
+#for loop for getting sequences and assigning taxonomy? 
+for (fastq in filtFs) {
+print(fastq)
+seqs = getSequences(fastq)
+tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
+write.csv(tax_rc, paste('tax', fastq, 'csv', sep = '.'))
+}
+
+
+seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
+tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
+
+
 
 
