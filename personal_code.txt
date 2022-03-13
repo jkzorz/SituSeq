@@ -61,4 +61,12 @@ seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
 tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 
 
+####MERGE MULTIPLE DATA FRAMES?
+library(tidyverse)
+
+#put all data frames into list
+df_list <- list(df1, df2, df3)
+
+#merge all data frames in list
+df_list %>% reduce(full_join, by='variable_name')
 
