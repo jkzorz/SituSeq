@@ -74,3 +74,7 @@ df_list %>% reduce(full_join, by='variable_name')
 #read all data frames into a list?
 temp = list.files(pattern="*fastq.gz.csv")
 myfiles = lapply(temp, read.csv)
+
+
+dfList_agg<-lapply(myfiles, function(i) {
+  aggregate(i[,1], by=list(i[,3]), FUN=summary)
