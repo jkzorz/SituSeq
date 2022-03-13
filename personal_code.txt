@@ -42,13 +42,16 @@ for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
 tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
-write.csv(tax_rc, paste('tax', fastq, 'csv', sep = '.'))
+write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 }
 
 
+#Time for for loop of 5 samples: 
+# user   system  elapsed 
+#50500.41    69.48  7178.46 
+
 seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
 tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
-
 
 
 
