@@ -28,6 +28,9 @@ sample.names = sapply(strsplit(basename(fnFs), "_"), `[`, 1)
 filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
 names(filtFs) = sample.names
 
+
+
+
 #filter and trim command - compress true or false?
 out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
@@ -44,6 +47,10 @@ seqs = getSequences(fastq)
 tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 }
+
+#read in newly made csv files 
+temp = list.files(pattern="*fastq.gz.csv")
+for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
 
 
 #Time for for loop of 5 samples: 
