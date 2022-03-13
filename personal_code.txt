@@ -70,3 +70,7 @@ df_list <- list(df1, df2, df3)
 #merge all data frames in list
 df_list %>% reduce(full_join, by='variable_name')
 
+
+#read all data frames into a list?
+temp = list.files(pattern="*.csv")
+myfiles = lapply(temp, read.delim)
