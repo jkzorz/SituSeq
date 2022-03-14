@@ -47,7 +47,7 @@ seqs = getSequences(fastq)
 sub = sample(1:length(seqs), 1000, replace=FALSE)
 print(head(sub)) #take out later 
 seq2 = seqs[sub]
-tax_rc = assignTaxonomy(seqs2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
+tax_rc = assignTaxonomy(seq2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 }
 
