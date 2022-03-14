@@ -45,26 +45,29 @@ for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
 sub = sample(1:length(seqs), 1000, replace=FALSE)
+print(head(sub)) #take out later 
 seq2 = seqs[sub]
 tax_rc = assignTaxonomy(seqs2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 }
 
-#generate random numbers to subset sequences - 1000 sequences
-sub = sample(1:length(seqs), 1000, replace=FALSE)
-
-#read in newly made csv files 
-temp = list.files(pattern="*fastq.gz.csv")
-for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i]))
-
-
-#Time for for loop of 5 samples: 
+#Time for for loop of 5 samples (all sequences): system.time()
 # user   system  elapsed 
 #50500.41    69.48  7178.46 
 
-seqs = getSequences('concat_trimmed_1200-1600_singleline.fasta')
-tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 
+#read in newly made csv files 
+temp = list.files(pattern="*fastq.gz.csv")
+my_list = list()
+for (i in 1:length(temp)) {
+    new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100)
+    my_list[[length(my_list) + 1]] <- new
+}
+
+
+
+#generate random numbers to subset sequences - 1000 sequences
+#sub = sample(1:length(seqs), 1000, replace=FALSE)
 
 ####MERGE MULTIPLE DATA FRAMES?
 library(tidyverse)
