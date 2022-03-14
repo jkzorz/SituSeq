@@ -40,7 +40,7 @@ head(out)
 table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
 plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
 
-#for loop for getting sequences and assigning taxonomy? 
+#for loop for getting sequences and assigning taxonomy - with subsetting to 1000 reads
 for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
