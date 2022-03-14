@@ -58,11 +58,22 @@ write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 
 #read in newly made csv files 
 temp = list.files(pattern="*fastq.gz.csv")
-my_list = list()
+temp_list = list()
 for (i in 1:length(temp)) {
-    new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100)
-    my_list[[length(my_list) + 1]] <- new
-}
+    sample = gsub("_filt.fastq.gz.csv", "", temp[[i]])
+    sample2 = gsub("tax.","",sample)
+    x = paste(sample2, 'abund', sep = "_")
+    new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
+    colnames(new) = c("Phylum", x)
+temp_list[[length(temp_list) + 1]] <- new }
+
+
+#merge all data frames in list
+tax_df = temp_list %>% reduce(full_join, by='Phylum')
+
+#long format
+tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+
 
 
 
@@ -79,10 +90,4 @@ df_list <- list(df1, df2, df3)
 df_list %>% reduce(full_join, by='variable_name')
 
 
-#read all data frames into a list?
-temp = list.files(pattern="*fastq.gz.csv")
-myfiles = lapply(temp, read.csv)
 
-
-dfList_agg<-lapply(myfiles, function(i) {
-  aggregate(i[,1], by=list(i[,3]), FUN=summary)})
