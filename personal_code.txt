@@ -62,9 +62,8 @@ temp_list = list()
 for (i in 1:length(temp)) {
     sample = gsub("_filt.fastq.gz.csv", "", temp[[i]])
     sample2 = gsub("tax.","",sample)
-    x = paste(sample2, 'abund', sep = "_")
     new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
-    colnames(new) = c("Phylum", x)
+    colnames(new) = c("Phylum", sample2)
 temp_list[[length(temp_list) + 1]] <- new }
 
 
