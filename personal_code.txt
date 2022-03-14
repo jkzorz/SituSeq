@@ -55,6 +55,9 @@ write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 # user   system  elapsed 
 #50500.41    69.48  7178.46 
 
+#Time for for loop of 5 samples (1000 sequence subset): system.time()
+# user   system  elapsed 
+#12473.63    30.50  2162.59
 
 #read in newly made csv files 
 temp = list.files(pattern="*fastq.gz.csv")
@@ -79,7 +82,7 @@ colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'light
 
 #bubble plot
  xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 8, angle = 315, vjust = 0, hjust =0), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours )
- 
+ xx
  #save bubble plot
  ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
  
@@ -92,7 +95,7 @@ colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'light
 
 #bar plot of most abundant phyla
 gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "black", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
-
+gg
 #save plot
 ggsave("bar_plot_top_phyla.png", height = 5, width = 5)
 
