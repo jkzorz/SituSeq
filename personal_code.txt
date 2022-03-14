@@ -44,9 +44,14 @@ plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
 for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
-tax_rc = assignTaxonomy(seqs, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
+sub = sample(1:length(seqs), 1000, replace=FALSE)
+seq2 = seqs[sub]
+tax_rc = assignTaxonomy(seqs2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
 }
+
+#generate random numbers to subset sequences - 1000 sequences
+sub = sample(1:length(seqs), 1000, replace=FALSE)
 
 #read in newly made csv files 
 temp = list.files(pattern="*fastq.gz.csv")
