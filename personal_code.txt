@@ -73,8 +73,28 @@ tax_df = temp_list %>% reduce(full_join, by='Phylum')
 #long format
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
+#colour scheme - 12 colours for max 12 barcodes
+colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black')
 
 
+#bubble plot
+ xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 8, angle = 315, vjust = 0, hjust =0), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours )
+ 
+ #save bubble plot
+ ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
+ 
+ #top phyla 
+ tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max)
+ #select top 10 most abundant taxa, based on abundance in one sample
+ tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
+ 
+ tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+
+#bar plot of most abundant phyla
+gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "black", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
+
+#save plot
+ggsave("bar_plot_top_phyla.png", height = 5, width = 5)
 
 #generate random numbers to subset sequences - 1000 sequences
 #sub = sample(1:length(seqs), 1000, replace=FALSE)
