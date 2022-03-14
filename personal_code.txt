@@ -77,4 +77,4 @@ myfiles = lapply(temp, read.csv)
 
 
 dfList_agg<-lapply(myfiles, function(i) {
-  aggregate(i[,1], by=list(i[,3]), FUN=summary)
+  aggregate(i[,1], by=list(i[,3]), FUN=summary)})
