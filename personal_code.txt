@@ -1,7 +1,7 @@
 # Open powershell and type 'wsl' 
 
 #change directory
-cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass/
+cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/
 #concatenate files 
 for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
 
@@ -9,7 +9,7 @@ for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
 for i in *.fastq.gz; do gunzip $i; done
 
 #in R
-setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass")
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
 library(dada2)
 library(tidyverse)
 
@@ -32,7 +32,7 @@ names(filtFs) = sample.names
 #filter and trim command - compress true or false?
 out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
-head(out) 
+head(out,12) 
 
 #can see distribution of sequence read lengths: 
 table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
