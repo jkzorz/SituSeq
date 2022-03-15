@@ -29,8 +29,6 @@ filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
 names(filtFs) = sample.names
 
 
-
-
 #filter and trim command - compress true or false?
 out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
@@ -44,26 +42,27 @@ plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
 for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
-sub = sample(1:length(seqs), 1000, replace=FALSE)
-print(head(sub)) #take out later 
+sub = sample(1:length(seqs), 1000, replace=FALSE) 
 seq2 = seqs[sub]
 tax_rc = assignTaxonomy(seq2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
-write.csv(tax_rc, paste('tax', basename(fastq), 'csv', sep = '.' ))
+base = basename(fastq)
+samples = gsub("_filt.fastq.gz", "", base)
+write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 }
 
 #Time for for loop of 5 samples (all sequences): system.time()
 # user   system  elapsed 
 #50500.41    69.48  7178.46 
 
-#Time for for loop of 5 samples (1000 sequence subset): system.time()
+#Time for for loop of 5 samples (1000 sequence subset) ~7 minutes/sample: system.time()
 # user   system  elapsed 
 #12473.63    30.50  2162.59
 
 #read in newly made csv files 
-temp = list.files(pattern="*fastq.gz.csv")
+temp = list.files(pattern="tax.*.csv")
 temp_list = list()
 for (i in 1:length(temp)) {
-    sample = gsub("_filt.fastq.gz.csv", "", temp[[i]])
+    sample = gsub(".csv", "", temp[[i]])
     sample2 = gsub("tax.","",sample)
     new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
     colnames(new) = c("Phylum", sample2)
@@ -99,17 +98,7 @@ gg
 #save plot
 ggsave("bar_plot_top_phyla.png", height = 5, width = 5)
 
-#generate random numbers to subset sequences - 1000 sequences
-#sub = sample(1:length(seqs), 1000, replace=FALSE)
 
-####MERGE MULTIPLE DATA FRAMES?
-library(tidyverse)
-
-#put all data frames into list
-df_list <- list(df1, df2, df3)
-
-#merge all data frames in list
-df_list %>% reduce(full_join, by='variable_name')
 
 
 
