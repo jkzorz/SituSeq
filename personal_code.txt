@@ -58,6 +58,10 @@ write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 # user   system  elapsed 
 #12473.63    30.50  2162.59
 
+#Time for for loop of 10 samples (1000 sequence subset) 
+# user   system  elapsed 
+#25717.75    34.67  4300.14 
+
 #read in newly made csv files 
 temp = list.files(pattern="tax.*.csv")
 temp_list = list()
