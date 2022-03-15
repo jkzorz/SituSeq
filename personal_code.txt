@@ -90,7 +90,7 @@ colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'light
  ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
  
  #top phyla 
- tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max)
+ tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
  #select top 10 most abundant taxa, based on abundance in one sample
  tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
  
