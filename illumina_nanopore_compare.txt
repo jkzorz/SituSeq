@@ -11,6 +11,8 @@ library(splitstackshape)
 
 asvm0 = asvm %>% filter(value != 0)
 
-#error
-asvm2 = expandRows(asvm0, asvm0$value)
-Error in .subset2(x, i, exact = exact) : no such index at level 1
+#error repeating on value column didn't work
+#asvm2 = expandRows(asvm0, asvm0$value)
+#repeating on 9th column (which is value column did for some reason)
+asvm2 = expandRows(asvm0, count = 9)
+
