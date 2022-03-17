@@ -49,8 +49,8 @@ filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
 names(filtFs) = sample.names
 
 
-#filter and trim command - compress true or false?
-out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
+#filter and trim command - compress true or false?, originally 1350 and 1850, try 1200 and 1800?
+out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1800, minLen = 1200,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
 head(out,12) 
 
