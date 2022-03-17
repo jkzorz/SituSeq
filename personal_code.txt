@@ -35,8 +35,8 @@ fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
 path = getwd()
 
 #Forward and fastq filenames have format: 
-#barcode01_cat.fastq 
-fnFs = sort(list.files(path, pattern="_cat.fastq.gz", full.names = TRUE))
+#barcode01_combined.fastq 
+fnFs = sort(list.files(path, pattern="_combined.fastq.gz", full.names = TRUE))
 
 #Extract sample names, assuming filenames have format: #samplename_XXX.fastq.gz
 sample.names = sapply(strsplit(basename(fnFs), "_"), `[`, 1)
