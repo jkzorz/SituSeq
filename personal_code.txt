@@ -9,11 +9,12 @@ cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Ana
 #unzip files - don't know if this is necessary
 #for i in *.fastq.gz; do gunzip $i; done
 
-#in R
+#in R - load packages in this order to avoid masking issues
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
+library(ShortRead)
 library(dada2)
 library(tidyverse)
-library(ShortRead)
+
 
 #try concatenating nanopore files in R
 folders <- list.files(pattern = "barcode..$" )
