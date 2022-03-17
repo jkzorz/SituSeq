@@ -12,7 +12,7 @@ for i in *.fastq.gz; do gunzip $i; done
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
 library(dada2)
 library(tidyverse)
-
+library(ShortRead)
 
 #try concatenating nanopore files in R
 folders <- list.files(pattern = "barcode..$" )
@@ -21,7 +21,14 @@ for (directory in folders) {
 print(directory) 
 files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq") 
 print(files)
+fout = file.path(paste(directory, "combined.fastq", sep = "_"))
+    for (fl in files) {
+    fq = readFastq(paste(directory,"/",fl, sep = ""))
+        writeFastq(fq, fout, mode="a")
+        }
 }
+
+
 
 
 #save path to object
