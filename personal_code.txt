@@ -21,7 +21,7 @@ for (directory in folders) {
 print(directory) 
 files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq") 
 print(files)
-fout = file.path(paste(directory, "combined.fastq", sep = "_"))
+fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
     for (fl in files) {
     fq = readFastq(paste(directory,"/",fl, sep = ""))
         writeFastq(fq, fout, mode="a")
