@@ -1,1 +1,16 @@
 
+setwd(""C:/Users/jacqu/Documents/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined")
+asv = read.csv("../../Illumina_reads/seaquencing_ASVseq_taxa.csv")
+
+library(reshape2)
+ asvm = melt(asv, id = c("ASVID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus"))
+
+
+#library(data.table)
+library(splitstackshape)
+
+asvm0 = asvm %>% filter(value != 0)
+
+#error
+asvm2 = expandRows(asvm0, asvm0$value)
+Error in .subset2(x, i, exact = exact) : no such index at level 1
