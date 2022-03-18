@@ -29,6 +29,14 @@ fun = function(i){
 
 asvm_sub = lapply(asvm_split, fun)
 
+#apply phyla summary and abundance
+fun2 = function(i){
+    phy = i %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
+    }
+test = lapply(asvm_sub, fun2)    
+
+#apply phyla summary and abundance
+#test = asvm_sub %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
 
 
 
