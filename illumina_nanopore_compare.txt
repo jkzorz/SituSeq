@@ -38,6 +38,19 @@ phylum_sum = lapply(asvm_sub, fun2)
 tax_df = phylum_sum %>% reduce(full_join, by='Phylum')
 colnames(tax_df) = c("Phylum", names(phylum_sum))
 
+#shorten column names 
+colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
+
+#reorder and remove samples according to what was sequenced on Nanopore
+tax_df2 = tax_df[,c(1,10,11,12,13,14,15,2,3,4,5,6,7)]
+
+#test run without barcodes 8 and 10
+#tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
+
+
+
+
 
 
 
