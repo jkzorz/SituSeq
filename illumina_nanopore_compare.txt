@@ -45,10 +45,42 @@ colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
 #reorder and remove samples according to what was sequenced on Nanopore
 tax_df2 = tax_df[,c(1,10,11,12,13,14,15,2,3,4,5,6,7)]
 
+#to be continued...
+
+
+###########################################
 #test run without barcodes 8 and 10
-#tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
+tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
+colnames(tax_df3)[2:ncol(tax_df3)] = paste("illumina",  colnames(tax_df3)[2:ncol(tax_df3)], sep = "_")
 
 
+#trial with incomplete nanopore data
+nano = read.csv("trial3_tax_df.csv",header = TRUE)
+nano2 = nano %>% select(!c(X, max))
+colnames(nano2)[2:ncol(nano2)] = paste("nano",  colnames(nano2)[2:ncol(nano2)], sep = "_")
+
+#join illumina and nanopore tables
+tax_comb = full_join(tax_df3, nano2, by = "Phylum")
+tax_comb2 = tax_comb %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance") %>% separate(Sample, into = c("Tech", "Sample"), sep = "_") 
+
+#change sample names from nanopore 
+tax_comb2$Sample = gsub("barcode01", "2B1.C18.TinyBubbles.0.4", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode02", "2B1.C18.TinyBubbles.4.8", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode03", "2B1.C18.TinyBubbles.8.12", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode04", "2B1.C18.TinyBubbles.12.16", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode05", "2B1.C18.TinyBubbles.16.20", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode06", "2B1.C18.TinyBubbles.20.24", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode07", "2AT.E46.Transect175NW.0.4", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode09", "2AT.E46.Transect175NW.8.12", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode11", "2AT.E46.Transect175NW.16.20", tax_comb2$Sample)
+tax_comb2$Sample = gsub("barcode12", "2AT.E46.Transect175NW.20.24", tax_comb2$Sample)
+
+tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance)
+tax_comb3[,3:4][is.na(tax_comb3[,3:4])] <- 0
+
+#subset
+np = tax_comb2 %>% filter(Tech == "nano")
+illum = tax_comb2 %>% filter(Tech == "illumina")
 
 
 
