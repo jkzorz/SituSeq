@@ -33,12 +33,11 @@ asvm_sub = lapply(asvm_split, fun)
 fun2 = function(i){
     phy = i %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
     }
-test = lapply(asvm_sub, fun2)    
+phylum_sum = lapply(asvm_sub, fun2)    
 
-#apply phyla summary and abundance
-#test = asvm_sub %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
+tax_df = phylum_sum %>% reduce(full_join, by='Phylum')
+colnames(tax_df) = c("Phylum", names(phylum_sum))
 
 
 
-#sample 1000 randomly
-sub = sample(1:length(seqs), 1000, replace=FALSE) 
+
