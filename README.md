@@ -5,10 +5,8 @@ The goal of these workflows is to enable the easiest and fastest possible offlin
 Before running the workflows offline, the following programs need to be installed. Note there is overlap in software between stream 1 and stream 2 analyses. 
 
 ### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
-1. Windows substem for linux (wsl)
-2. cutadapt
-3. R, Rstudio, and packages *dada2* and *tidyverse* 
-4. Taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
+1. R, Rstudio, and packages *dada2*, *tidyverse*, and *ShortRead* 
+2. Taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
 
 ### Stream 2: Blast sequences against custom database
 1. Windows substem for linux (wsl)
@@ -18,13 +16,26 @@ Before running the workflows offline, the following programs need to be installe
 
 *potential to run cutadapt filter and trim step from r using dada2 filterandtrim command - possibility to only take one read, to trim from front and back, and to filter based on length*
 
-*something to address: MinKnow automatically calculates "pass" or "fail" for reads based on average quality scores (https://bioinformatics.stackexchange.com/questions/8735/how-does-minknow-classify-1d-reads-as-pass-or-fail). Is this quality score high enough for our purposes?* 
+## Install R, R-Studio, and packages
+
+Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/products/rstudio/download/#download) and load *dada2* and *tidyverse* packages
+
+```
+#install tidyverse
+install.packages("tidyverse")
+
+#install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("dada2", version = "3.14")
+
+```
 
 ## Install windows subsystem for linux 
 Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell by entering ```wsl```
  
 
-## Install cutadapt 
+## Install cutadapt (optional)
 Open wsl (by typing ```wsl``` in powershell) and install *cutadapt* (https://cutadapt.readthedocs.io/en/stable/)
 *do you need to install python as well, I can't remember...*
 
@@ -44,62 +55,37 @@ Once downloaded, run the application to finish the installation.
 
 
 
-## Install R, R-Studio, and packages
+# Analysis Workflow - Stream 1
 
-Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/products/rstudio/download/#download) and load *dada2* and *tidyverse* packages
+Analysis workflow for assigning taxonomy to sequences in R. 
 
-```
-#install tidyverse
-install.packages("tidyverse")
+## Step 0: Set working directory, load packages, and concatenate all individual fastq files belonging to one sample into one file  
 
-#install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("dada2", version = "3.14")
+Set working directory in R, and load *ShortRead*, *dada2*, and *tidyverse* packages (load packages in this order to avoid masking issues). 
 
 ```
-
-
-# Analysis Workflow
-
-## One sample:
-If you only have one sample follow these steps. If you have multiple barcoded samples follow the steps below. 
-
-## Step 0: Concatenate all individual fastq files belonging to one sample into one file   
-Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
-
-``` 
-cat *.fastq > concat.fastq
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
+library(ShortRead)
+library(dada2)
+library(tidyverse)
 ```
 
-## Step 1: Filter reads by length 
-
-Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can be run from a linux system, or if using a windows operating system, through windows subsystem for linux (wsl). Using a filter cutoff of between 1350 bp and 1650 bp.  
-
-*can we use nanopore basecalling to remove barcodes and primers?*
-
-*barcdoe seems to be ~83-87 bp based on blast hits, don't know if this also includes primer or not*
-
-*need to decide if using the actual primer sequence, or just cutting off the number of base pairs? Also need to optimize filtering length* 
+Keeping the same directory and file format as the MinKnow sofware (the fastq files of each sample are in separate folders with the format barcode01, barcode 02, etc - *is this the same for all basecalling programs?*), concatenate all fastq files from the same sample into one large fastq file. 
 
 ```
-#cutadapt 
+#concatenating nanopore files in R
+folders <- list.files(pattern = "barcode..$" )
 
-#remove first 100 bps - change '-u' parameter to primer length
-cutadapt -u 100 -o concat_trim1.fastq concat.fastq
-
-#remove last 100 bps - change '-u' paramater to primer length
-cutadapt -u -100 -o concat_trim2.fastq concat_trim1.fastq
-
-#filter out reads that are less than 1350 bp or more than 1650 bp - need to determine optimum lengths... 
-cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq 
-
-#Possible to do with dada2, although using minLen ended up removing all reads? Maybe a bug? 
-#it was issue with "truncQ" parameter. It is optional, but automatically defaults to 2, which ended up truncating most of the reads way too soon... need to add truncQ=0 in #order to avoid this
-out = filterAndTrim('apt_103_test1.fastq', 'aptseqs_trim_dada2.fastq', minLen = 600, maxLen = 1800, trimLeft = 100, trimRight = 100, truncQ = 0)
-#another example, which gives the same result as the previous cutadapt commands:
- out = filterAndTrim(fwd = '../../CLI_Nanopore_test/CLI_nanopore_test.fastq', filt =  'cliseqs_trunc_test_dada2.fastq', trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
-
+for (directory in folders) {
+print(directory) 
+files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq") 
+print(files)
+fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
+    for (fl in files) {
+    fq = readFastq(paste(directory,"/",fl, sep = ""))
+        writeFastq(fq, fout, mode="a")
+        }
+}
 ```
 
 ## Step 2: Import data into R and assign taxonomy
@@ -302,3 +288,44 @@ pip install nanofilt
 
 NanoFilt -h
 ```
+
+
+
+### Old stuff
+## Step 0: Concatenate all individual fastq files belonging to one sample into one file   
+Nanopore splits sequences into individual file chunks of a pre-determined number of sequences. It is easiest going forward if these little files are concatenated into one large file.  
+
+``` 
+cat *.fastq > concat.fastq
+```
+
+## Step 1: Filter reads by length 
+
+Use cutadapt to remove primer sequences and filter reads by length. Cutadapt can be run from a linux system, or if using a windows operating system, through windows subsystem for linux (wsl). Using a filter cutoff of between 1350 bp and 1650 bp.  
+
+*can we use nanopore basecalling to remove barcodes and primers?*
+
+*barcdoe seems to be ~83-87 bp based on blast hits, don't know if this also includes primer or not*
+
+*need to decide if using the actual primer sequence, or just cutting off the number of base pairs? Also need to optimize filtering length* 
+
+```
+#cutadapt 
+
+#remove first 100 bps - change '-u' parameter to primer length
+cutadapt -u 100 -o concat_trim1.fastq concat.fastq
+
+#remove last 100 bps - change '-u' paramater to primer length
+cutadapt -u -100 -o concat_trim2.fastq concat_trim1.fastq
+
+#filter out reads that are less than 1350 bp or more than 1650 bp - need to determine optimum lengths... 
+cutadapt -m 1350 -M 1650 -o  concat_trimmed_1350-1650.fastq concat_trim2.fastq 
+
+#Possible to do with dada2, although using minLen ended up removing all reads? Maybe a bug? 
+#it was issue with "truncQ" parameter. It is optional, but automatically defaults to 2, which ended up truncating most of the reads way too soon... need to add truncQ=0 in #order to avoid this
+out = filterAndTrim('apt_103_test1.fastq', 'aptseqs_trim_dada2.fastq', minLen = 600, maxLen = 1800, trimLeft = 100, trimRight = 100, truncQ = 0)
+#another example, which gives the same result as the previous cutadapt commands:
+ out = filterAndTrim(fwd = '../../CLI_Nanopore_test/CLI_nanopore_test.fastq', filt =  'cliseqs_trunc_test_dada2.fastq', trimLeft = 100, trimRight = 100, maxLen = 1850, minLen = 1350,  truncQ = 0, compress = FALSE)
+
+```
+
