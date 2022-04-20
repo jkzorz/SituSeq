@@ -87,6 +87,7 @@ fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
 ```
 
 ## Filter and trim reads using dada2 *filterandtrim* command
+Use the dada2 *filterandtrim* command to remove primer sequences (trimLeft, trimRight) and filter out any sequences that are shorter or longer than expected based on the intended amplicon target (minLen, maxLen: 1200-1800 bp).  
 
 ```
 #save path to object
@@ -131,19 +132,6 @@ write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 }
 ```
 
-
-## Time info - delete later 
-#Time for for loop of 5 samples (all sequences): system.time()
-# user   system  elapsed 
-#50500.41    69.48  7178.46 
-
-#Time for for loop of 5 samples (1000 sequence subset) ~7 minutes/sample: system.time()
-# user   system  elapsed 
-#12473.63    30.50  2162.59
-
-#Time for for loop of 10 samples (1000 sequence subset) 
-# user   system  elapsed 
-#25717.75    34.67  4300.14 
 
 ## Analyze and visualize results
 This code creates a bubble plot of the abundances of all phyla in all samples, and a stacked bar plot of the top 10 most abundant phyla. 
@@ -472,3 +460,16 @@ out = filterAndTrim('apt_103_test1.fastq', 'aptseqs_trim_dada2.fastq', minLen = 
 
 ```
 
+
+## Time info - delete later 
+#Time for for loop of 5 samples (all sequences): system.time()
+# user   system  elapsed 
+#50500.41    69.48  7178.46 
+
+#Time for for loop of 5 samples (1000 sequence subset) ~7 minutes/sample: system.time()
+# user   system  elapsed 
+#12473.63    30.50  2162.59
+
+#Time for for loop of 10 samples (1000 sequence subset) 
+# user   system  elapsed 
+#25717.75    34.67  4300.14 
