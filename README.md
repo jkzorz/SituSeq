@@ -14,7 +14,6 @@ Before running the workflows offline, the following programs need to be installe
 3. blast
 4. Optional: R, Rstudio, and package *tidyverse* for visualization of blast results 
 
-*potential to run cutadapt filter and trim step from r using dada2 filterandtrim command - possibility to only take one read, to trim from front and back, and to filter based on length*
 
 ## Install R, R-Studio, and packages (Stream 1 and 2)
 
@@ -59,28 +58,20 @@ Once downloaded, run the application to finish the installation.
 
 Analysis workflow for assigning taxonomy to sequences in R. 
 
-# Open powershell and type 'wsl' 
 
-#change directory
-cd My\ Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/
-#concatenate files 
-#for i in barcode*; do echo $i; cat $i/*.fastq.gz > ${i}_cat.fastq.gz;done
-
-
-#unzip files - don't know if this is necessary
-#for i in *.fastq.gz; do gunzip $i; done
-
-
-####can do everything in R now... 
-
-#in R - load packages in this order to avoid masking issues
+## Open RStudio, set working directory and load packages in this order to avoid masking issues
+```
+#set working directory
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
+
+#load packages
 library(ShortRead)
 library(dada2)
 library(tidyverse)
+```
 
-
-#try concatenating nanopore files in R
+## Concatenate sequence files in R
+```
 folders <- list.files(pattern = "barcode..$" )
 
 for (directory in folders) {
@@ -93,10 +84,11 @@ fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
         writeFastq(fq, fout, mode="a")
         }
 }
+```
 
+## Filter and trim reads using dada2 *filterandtrim* command
 
-
-
+```
 #save path to object
 path = getwd()
 
@@ -107,13 +99,11 @@ fnFs = sort(list.files(path, pattern="_combined.fastq.gz", full.names = TRUE))
 #Extract sample names, assuming filenames have format: #samplename_XXX.fastq.gz
 sample.names = sapply(strsplit(basename(fnFs), "_"), `[`, 1)
 
-
 #filter and trim reads- create new paths for new files 
 filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
 names(filtFs) = sample.names
 
-
-#filter and trim command - compress true or false?, originally 1350 and 1850, try 1200 and 1800?
+#filter and trim command - originally 1350 and 1850, try 1200 and 1800?
 out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1800, minLen = 1200,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
 head(out,12) 
@@ -122,6 +112,12 @@ head(out,12)
 table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
 plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
 
+```
+
+## Assign taxonomy to reads using dada2 *assignTaxonomy* command
+Taxonomic assignment is the most time consuming and computationally expenisve part of this workflow. To reduce time and computational costs, only a subset of 1000 sequences are used. This number can be changed in the code below if desired. This code outputs a csv file for each sample with the taxonomic information of each sequence. 
+
+```
 #for loop for getting sequences and assigning taxonomy - with subsetting to 1000 reads
 for (fastq in filtFs) {
 print(fastq)
@@ -133,7 +129,10 @@ base = basename(fastq)
 samples = gsub("_filt.fastq.gz", "", base)
 write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 }
+```
 
+
+## Time info - delete later 
 #Time for for loop of 5 samples (all sequences): system.time()
 # user   system  elapsed 
 #50500.41    69.48  7178.46 
@@ -146,6 +145,10 @@ write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 # user   system  elapsed 
 #25717.75    34.67  4300.14 
 
+## Analyze and visualize results
+This code creates a bubble plot of the abundances of all phyla in all samples, and a stacked bar plot of the top 10 most abundant phyla. 
+
+```
 #read in newly made csv files 
 temp = list.files(pattern="tax.*.csv")
 temp_list = list()
@@ -170,15 +173,15 @@ colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'light
 #bubble plot
  xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 8, angle = 315, vjust = 0, hjust =0), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours )
  xx
- #save bubble plot
- ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
+#save bubble plot
+ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
  
- #top phyla 
+#top phyla 
  tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
  #select top 10 most abundant taxa, based on abundance in one sample
  tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
  
- tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
 #bar plot of most abundant phyla
 gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "black", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
@@ -186,8 +189,7 @@ gg
 #save plot
 ggsave("bar_plot_top_phyla.png", height = 5, width = 5)
 
-
-
+```
 
 
 
