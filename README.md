@@ -71,6 +71,8 @@ library(tidyverse)
 ```
 
 ## Concatenate sequence files in R
+Concatenate all individual sequence files from each sample into one combined fastq file per sample. The code expects the input file structure to resemble the default output from MinKnow with the sequences of each sample in separate folders called "barcode01", "barcode02", etc.   
+
 ```
 folders <- list.files(pattern = "barcode..$" )
 
