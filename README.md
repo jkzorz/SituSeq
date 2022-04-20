@@ -137,7 +137,7 @@ write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 
 
 ## Analyze and visualize results
-This code creates a bubble plot of the abundances of all phyla in all samples, and a stacked bar plot of the top 10 most abundant phyla. 
+This code creates a bubble plot of the abundances of all phyla in all samples, and a stacked bar plot of the top 10 most abundant phyla across all samples. Change the "colours" object to update the colour scheme as desired.  
 
 ```
 #read in newly made csv files 
