@@ -59,7 +59,8 @@ Once downloaded, run the application to finish the installation.
 Analysis workflow for assigning taxonomy to sequences in R. 
 
 
-## Open RStudio, set working directory and load packages in this order to avoid masking issues
+## Setup
+Open RStudio, set working directory to location containing barcode sample folders, and load packages in this order to avoid masking issues
 ```
 #set working directory
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
