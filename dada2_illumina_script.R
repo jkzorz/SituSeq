@@ -1,4 +1,4 @@
-##dada2 analysis of samples 2AT 175NW (E46) and 2B-1 TinyBubbles (C18) for Seaquencing 
+##dada2 analysis of samples 2AT 175NW (E46), 2B-1 TinyBubbles (C18), 2A-2 Purple Haze (D52), 2B-1 Clamshell (B22), and 5-1 Kilo (E21) for Seaquencing 
 
 #set working directory
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads")
