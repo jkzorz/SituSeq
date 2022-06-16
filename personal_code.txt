@@ -20,7 +20,7 @@ library(tidyverse)
 
 
 #try concatenating nanopore files in R
-folders <- list.files(pattern = "barcode..$" )
+folders <- list.files(pattern = "barcode" )
 
 for (directory in folders) {
 print(directory) 
@@ -44,7 +44,7 @@ path = getwd()
 fnFs = sort(list.files(path, pattern="_combined.fastq.gz", full.names = TRUE))
 
 #Extract sample names, assuming filenames have format: #samplename_XXX.fastq.gz
-sample.names = sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+sample.names = sapply(strsplit(basename(fnFs), "\\."), `[`, 1)
 
 
 #filter and trim reads- create new paths for new files 
