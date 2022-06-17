@@ -1,6 +1,6 @@
 
-setwd("C:/Users/jacqu/Documents/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined")
-asv = read.csv("../../Illumina_reads/seaquencing_ASVseq_taxa.csv")
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
+asv = read.csv("../../Illumina_reads/seaquencing_ASVseq_taxa_4analysis.csv")
 
 library(reshape2)
 library(tidyverse)
@@ -41,39 +41,67 @@ colnames(tax_df) = c("Phylum", names(phylum_sum))
 #shorten column names 
 colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
+colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
 
 #reorder and remove samples according to what was sequenced on Nanopore
-tax_df2 = tax_df[,c(1,10,11,12,13,14,15,2,3,4,5,6,7)]
+#tax_df2 = tax_df[,c(1,10,11,12,13,14,15,2,3,4,5,6,7)]
 
 #to be continued...
 
 
 ###########################################
 #test run without barcodes 8 and 10
-tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
-colnames(tax_df3)[2:ncol(tax_df3)] = paste("illumina",  colnames(tax_df3)[2:ncol(tax_df3)], sep = "_")
-
+#tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
+#colnames(tax_df3)[2:ncol(tax_df3)] = paste("illumina",  colnames(tax_df3)[2:ncol(tax_df3)], sep = "_")
+colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
 
 #trial with incomplete nanopore data
-nano = read.csv("trial3_tax_df.csv",header = TRUE)
-nano2 = nano %>% select(!c(X, max))
-colnames(nano2)[2:ncol(nano2)] = paste("nano",  colnames(nano2)[2:ncol(nano2)], sep = "_")
+#nano = read.csv("trial3_tax_df.csv",header = TRUE)
+nano = read.csv("Seaquencing_phylum_summary.csv",header = TRUE)
+#nano2 = nano %>% select(!c(X, max))
+#colnames(nano2)[2:ncol(nano2)] = paste("nano",  colnames(nano2)[2:ncol(nano2)], sep = "_")
+colnames(nano)[2:ncol(nano)] = paste("nano",  colnames(nano)[2:ncol(nano)], sep = "-")
+colnames(nano) = gsub("X", "", colnames(nano))
 
 #join illumina and nanopore tables
-tax_comb = full_join(tax_df3, nano2, by = "Phylum")
-tax_comb2 = tax_comb %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance") %>% separate(Sample, into = c("Tech", "Sample"), sep = "_") 
+tax_comb = full_join(tax_df, nano, by = "Phylum")
+tax_comb2 = tax_comb %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance") %>% separate(Sample, into = c("Tech", "Sample"), sep = "-") 
 
 #change sample names from nanopore 
-tax_comb2$Sample = gsub("barcode01", "2B1.C18.TinyBubbles.0.4", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode02", "2B1.C18.TinyBubbles.4.8", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode03", "2B1.C18.TinyBubbles.8.12", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode04", "2B1.C18.TinyBubbles.12.16", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode05", "2B1.C18.TinyBubbles.16.20", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode06", "2B1.C18.TinyBubbles.20.24", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode07", "2AT.E46.Transect175NW.0.4", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode09", "2AT.E46.Transect175NW.8.12", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode11", "2AT.E46.Transect175NW.16.20", tax_comb2$Sample)
-tax_comb2$Sample = gsub("barcode12", "2AT.E46.Transect175NW.20.24", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode01", "2B1.C18.TinyBubbles.0.4", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode02", "2B1.C18.TinyBubbles.4.8", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode03", "2B1.C18.TinyBubbles.8.12", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode04", "2B1.C18.TinyBubbles.12.16", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode05", "2B1.C18.TinyBubbles.16.20", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode06", "2B1.C18.TinyBubbles.20.24", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode07", "2AT.E46.Transect175NW.0.4", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode09", "2AT.E46.Transect175NW.8.12", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode11", "2AT.E46.Transect175NW.16.20", tax_comb2$Sample)
+#tax_comb2$Sample = gsub("barcode12", "2AT.E46.Transect175NW.20.24", tax_comb2$Sample)
+
+
+#change underscores to periods in sample names 
+tax_comb2$Sample = gsub("_", ".", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2A2.D52", "2A2", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2AT.E46", "2AT", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2B1.B22", "2B1", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2B1.C18", "2B1", tax_comb2$Sample)
+tax_comb2$Sample = gsub("51.E21", "51", tax_comb2$Sample)
+tax_comb2$Sample = gsub("Transect","", tax_comb2$Sample)
+tax_comb2$Sample = gsub("04", "0.4", tax_comb2$Sample)
+tax_comb2$Sample = gsub("48", "4.8", tax_comb2$Sample)
+tax_comb2$Sample = gsub("812", "8.12", tax_comb2$Sample)
+tax_comb2$Sample = gsub("1216", "12.16", tax_comb2$Sample)
+tax_comb2$Sample = gsub("1620", "16.20", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2024", "20.24", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2428", "24.28", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2832", "28.32", tax_comb2$Sample)
+tax_comb2$Sample = gsub("3236", "32.36", tax_comb2$Sample)
+tax_comb2$Sample = gsub("3640", "36.40", tax_comb2$Sample)
+tax_comb2$Sample = gsub("51.Kilo.1.4", "51.Kilo.0.4", tax_comb2$Sample)
+tax_comb2$Sample = gsub("Clamshell.2430", "TinyBubbles.24.28", tax_comb2$Sample)
+tax_comb2$Phylum = gsub("NA", "Unknown", tax_comb2$Phylum)
 
 tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance)
 tax_comb3[,3:4][is.na(tax_comb3[,3:4])] <- 0
