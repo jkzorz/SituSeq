@@ -55,6 +55,7 @@ colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
 #tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
 #colnames(tax_df3)[2:ncol(tax_df3)] = paste("illumina",  colnames(tax_df3)[2:ncol(tax_df3)], sep = "_")
 colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
+tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
 
 #trial with incomplete nanopore data
 #nano = read.csv("trial3_tax_df.csv",header = TRUE)
@@ -101,7 +102,7 @@ tax_comb2$Sample = gsub("3236", "32.36", tax_comb2$Sample)
 tax_comb2$Sample = gsub("3640", "36.40", tax_comb2$Sample)
 tax_comb2$Sample = gsub("51.Kilo.1.4", "51.Kilo.0.4", tax_comb2$Sample)
 tax_comb2$Sample = gsub("Clamshell.2430", "TinyBubbles.24.28", tax_comb2$Sample)
-tax_comb2$Phylum = gsub("NA", "Unknown", tax_comb2$Phylum)
+
 
 tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance)
 tax_comb3[,3:4][is.na(tax_comb3[,3:4])] <- 0
