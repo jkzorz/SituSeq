@@ -99,6 +99,9 @@ temp_list[[length(temp_list) + 1]] <- new }
 #merge all data frames in list
 tax_df = temp_list %>% reduce(full_join, by='Phylum')
 
+#write phylum summary csv
+write.csv(tax_df, "Phylum_summary.csv")
+
 #long format
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
