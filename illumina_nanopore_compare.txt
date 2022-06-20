@@ -169,10 +169,11 @@ library(vegan)
 yy = tax_comb3 %>% select(Phylum, Sample, illumina, nano) %>% pivot_longer(!c(Phylum,Sample), names_to = "Tech", values_to = "Abundance")
 yy$Name = paste0(yy$Sample, "_", yy$Tech)
 yy2 = yy %>% pivot_wider(id_cols = Name, names_from = Phylum, values_from = Abundance)
+yym = as.matrix(yy2[,2:ncol(yy2)])
 set.seed(123)
 
 nmds = metaMDS(yym, distance = "bray")
-#Stress:     0.1304825
+#Stress:    0.1259655 
 
 data.scores = as.data.frame(scores(nmds)$sites)
 data.scores$Name = yy2$Name
@@ -197,15 +198,15 @@ xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Su
  
 ###Anosim and Mantel tests
 ano = anosim(yym, data.scores$Tech, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.066 
-      #Significance: 0.0058
+#ANOSIM statistic R: 0.06113 
+      #Significance: 0.0079
 
 ano = anosim(yym, data.scores$Site, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.4615 
+#ANOSIM statistic R: 0.4584 
      # Significance: 1e-04 
 
 ano = anosim(yym, data.scores$Subsite, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.3743 
+#ANOSIM statistic R: 0.3766 
 #Significance: 1e-04 
 
 
@@ -214,7 +215,7 @@ dist.abund = vegdist(yym, method = "bray")
 dist.temp = dist(data.scores$Depth1, method = "euclidean")
 abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
 
-#Mantel statistic r: 0.3311 
+#Mantel statistic r: 0.3337  
      # Significance: 1e-04 
 
 aa = as.vector(dist.abund)
