@@ -118,7 +118,7 @@ tax_comb3$Ratio = tax_comb3$illumina/tax_comb3$nano
 tax_comb3$Ratio[!is.finite(tax_comb3$Ratio)] <- NA
 tax_comb3$Ratio2 = tax_comb3$nano/tax_comb3$illumina
 tax_comb3$Ratio2[!is.finite(tax_comb3$Ratio2)] <- NA
-tax_comb4 = tax_comb3 %>% group_by(Phylum) %>% summarize(avg_ratio_illum = mean(Ratio, na.rm = TRUE), sd_ratio_illum = sd(Ratio, na.rm = TRUE),avg_ratio_nano = mean(Ratio2, na.rm = TRUE)*-1, sd_ratio_nano = sd(Ratio2, na.rm = TRUE)*-1)
+tax_comb4 = tax_comb3 %>% group_by(Phylum) %>% summarize(avg_ratio_illum = mean(Ratio, na.rm = TRUE), sd_ratio_illum = sd(Ratio, na.rm = TRUE),avg_ratio_nano = mean(Ratio2, na.rm = TRUE)*-1, sd_ratio_nano = sd(Ratio2, na.rm = TRUE)*-1, avg_illum = mean(illumina), avg_nano = mean(nano))
 #tax_comb4$ratio_combo = ifelse(tax_comb4$avg_ratio_illum >1, tax_comb4$avg_ratio_illum, tax_comb4$avg_ratio_nano)
 #tax_comb5 <- tax_comb4[order(-tax_comb4$ratio_combo),]\
 tax_comb5 <- tax_comb4[order(-tax_comb4$avg_ratio_illum),]
@@ -126,18 +126,18 @@ tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
 tax_comb5 = tax_comb5[complete.cases(tax_comb5[ , 2]),]
 tax_comb5 = tax_comb5[tax_comb5$avg_ratio_illum>0,]
 
-xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.5) + geom_point() + labs(x = "Illumina abundance : Nanopore abundance", y = "") +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_x_continuous(trans = "log10")
+ xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.25) + geom_point(aes(size = avg_illum, colour= avg_nano)) + labs(x = "Illumina abundance : Nanopore abundance", y = "", size = "Illumina \nabundance (%)", colour = "Nanopore \nabundance (%)" ) +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99")) + scale_x_continuous(trans = "log10") + scale_radius(breaks = c(1,5,10,20), range = c(1,6)) + scale_colour_gradient(high = "#28393E", low = "#90ADB6")
 
 
 #create ratio column
 #tax_comb4 = tax_comb3 %>% filter(illumina + nano > 1)
-tax_comb4 = tax_comb3
-tax_comb4$Ratio = tax_comb4$illumina/tax_comb4$nano
-tax_comb5 <- tax_comb4[order(-tax_comb4$Ratio),]
-tax_comb5 = tax_comb5 %>% filter(Ratio != Inf)
-tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
+#tax_comb4 = tax_comb3
+#tax_comb4$Ratio = tax_comb4$illumina/tax_comb4$nano
+#tax_comb5 <- tax_comb4[order(-tax_comb4$Ratio),]
+#tax_comb5 = tax_comb5 %>% filter(Ratio != Inf)
+#tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
 
-xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.5) + geom_boxplot(width =0.75, outlier.size = 0.5) + labs(x = "Illumina abundance : Nanopore abundance", y = "") +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"))
+#xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.5) + geom_boxplot(width =0.75, outlier.size = 0.5) + labs(x = "Illumina abundance : Nanopore abundance", y = "") +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"))
 
 #correlation - pearson
  cor(tax_comb3$illumina, tax_comb3$nano)
