@@ -169,3 +169,51 @@ F-statistic: 1.126e+04 on 1 and 2598 DF,  p-value: < 2.2e-16
 
 
 
+################
+###Make an NMDS based on phyla level abundance
+
+library(vegan)
+yy = tax_comb3 %>% select(Phylum, Sample, illumina, nano) %>% pivot_longer(!c(Phylum,Sample), names_to = "Tech", values_to = "Abundance")
+yy$Name = paste0(yy$Sample, "_", yy$Tech)
+yy2 = yy %>% pivot_wider(id_cols = Name, names_from = Phylum, values_from = Abundance)
+set.seed(123)
+
+nmds = metaMDS(yym, distance = "bray")
+#Stress:     0.1304825
+
+data.scores = as.data.frame(scores(nmds)$sites)
+data.scores$Name = yy2$Name
+data.scores = data.scores %>% separate(Name, into = c("Sample", "Tech"), sep = "_")
+data.scores$Sample2 = data.scores$Sample
+data.scores = data.scores %>% separate(Sample2, into = c("Site", "Subsite", "Depth1", "Depth2"), sep = "\\.")
+
+ano = anosim(yym, data.scores$Tech, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: 0.066 
+      #Significance: 0.0058
+
+ano = anosim(yym, data.scores$Site, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: 0.4615 
+     # Significance: 1e-04 
+
+ano = anosim(yym, data.scores$Subsite, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: 0.3743 
+#Significance: 1e-04 
+
+
+#Mantel tests
+dist.abund = vegdist(yym, method = "bray")
+dist.temp = dist(data.scores$Depth1, method = "euclidean")
+abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
+
+#Mantel statistic r: 0.3311 
+     # Significance: 1e-04 
+
+aa = as.vector(dist.abund)
+tt = as.vector(dist.temp)
+plot(aa,tt)
+at = data.frame(aa = aa, tt = tt)
+at2 = ggplot(at, aes(x = aa, y = tt)) + geom_point(alpha = 0.5) + theme_bw() + labs(x = "Bray Curtis Dissimilarity between samples", y = "Depth (cm) between samples") 
+
+
+
+
