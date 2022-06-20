@@ -108,19 +108,18 @@ tax_comb3$Phylum2 = ifelse((tax_comb3$illumina+tax_comb3$nano) > 7, tax_comb3$Ph
 colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(16)
 
 #scatter plot comparison 
-gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(0,53)) + scale_x_continuous(limits = c(0,53)) + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(0,85)) + scale_x_continuous(limits = c(0,85)) + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 
 
 #scatter plot comparison log scale 
-gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(NA,53), trans = "log10") + scale_x_continuous(limits = c(NA,53), trans = "log10") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(NA,85), trans = "log10") + scale_x_continuous(limits = c(NA,85), trans = "log10") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 
-
-#summarize by phylum
+#summarize by phylum - create ratio column
 tax_comb3$Ratio = tax_comb3$illumina/tax_comb3$nano
 tax_comb3$Ratio[!is.finite(tax_comb3$Ratio)] <- NA
 tax_comb3$Ratio2 = tax_comb3$nano/tax_comb3$illumina
 tax_comb3$Ratio2[!is.finite(tax_comb3$Ratio2)] <- NA
-tax_comb4 = tax_comb3 %>% group_by(Phylum) %>% summarize(avg_ratio_illum = mean(Ratio, na.rm = TRUE), sd_ratio_illum = sd(Ratio, na.rm = TRUE),avg_ratio_nano = mean(Ratio2, na.rm = TRUE)*-1, sd_ratio_nano = sd(Ratio2, na.rm = TRUE)*-1, avg_illum = mean(illumina), avg_nano = mean(nano))
+tax_comb4 = tax_comb3 %>% group_by(Phylum) %>% summarise(avg_ratio_illum = mean(Ratio, na.rm = TRUE),  avg_illum = mean(illumina), avg_nano = mean(nano), max_illum = max(illumina), max_nano = max(nano))
 #tax_comb4$ratio_combo = ifelse(tax_comb4$avg_ratio_illum >1, tax_comb4$avg_ratio_illum, tax_comb4$avg_ratio_nano)
 #tax_comb5 <- tax_comb4[order(-tax_comb4$ratio_combo),]\
 tax_comb5 <- tax_comb4[order(-tax_comb4$avg_ratio_illum),]
@@ -128,18 +127,10 @@ tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
 tax_comb5 = tax_comb5[complete.cases(tax_comb5[ , 2]),]
 tax_comb5 = tax_comb5[tax_comb5$avg_ratio_illum>0,]
 
- xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.25) + geom_point(aes(size = avg_illum, colour= avg_nano)) + labs(x = "Illumina abundance : Nanopore abundance", y = "", size = "Illumina \nabundance (%)", colour = "Nanopore \nabundance (%)" ) +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99")) + scale_x_continuous(trans = "log10") + scale_radius(breaks = c(1,5,10,20), range = c(1,6)) + scale_colour_gradient(high = "#28393E", low = "#90ADB6")
+xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.25) + geom_point(aes(size = avg_illum, colour= avg_nano)) + labs(x = "Illumina abundance : Nanopore abundance", y = "", size = "Illumina \nabundance (%)", colour = "Nanopore \nabundance (%)" ) +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99")) + scale_x_continuous(trans = "log10", breaks = c(0.125, 0.25, 0.5, 1, 2, 4, 8)) + scale_radius(breaks = c(1,10,20,40), range = c(1,6)) + scale_colour_gradient(high = "#28393E", low = "#90ADB6") 
 
-
-#create ratio column
-#tax_comb4 = tax_comb3 %>% filter(illumina + nano > 1)
-#tax_comb4 = tax_comb3
-#tax_comb4$Ratio = tax_comb4$illumina/tax_comb4$nano
-#tax_comb5 <- tax_comb4[order(-tax_comb4$Ratio),]
-#tax_comb5 = tax_comb5 %>% filter(Ratio != Inf)
-#tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
-
-#xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.5) + geom_boxplot(width =0.75, outlier.size = 0.5) + labs(x = "Illumina abundance : Nanopore abundance", y = "") +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94"))
+#max abundance
+xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.25) + geom_point(aes(size = max_illum, colour= max_nano)) + labs(x = "Illumina abundance : Nanopore abundance", y = "", size = "Max Illumina \nabundance (%)", colour = "Max Nanopore \nabundance (%)" ) +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99")) + scale_x_continuous(trans = "log10", breaks = c(0.125, 0.25, 0.5, 1, 2, 4, 8)) + scale_radius(breaks = c(1,10,20,40), range = c(1,6)) + scale_colour_gradient(high = "#28393E", low = "#90ADB6")
 
 #correlation - pearson
  cor(tax_comb3$illumina, tax_comb3$nano)
@@ -147,7 +138,7 @@ tax_comb5 = tax_comb5[tax_comb5$avg_ratio_illum>0,]
 
 #correlation - spearman 
 cor(tax_comb3$illumina, tax_comb3$nano, method = "spearman")
-0.8333326
+0.8371021
 
 s = lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 summary(s)
@@ -156,18 +147,18 @@ lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--24.674  -0.243  -0.243  -0.115  37.090 
+-22.016  -0.231  -0.231  -0.101  37.996 
 
 Coefficients:
                    Estimate Std. Error t value Pr(>|t|)    
-(Intercept)        0.242737   0.047679   5.091 3.82e-07 ***
-tax_comb3$illumina 0.842221   0.007938 106.097  < 2e-16 ***
+(Intercept)        0.231196   0.046668   4.954 7.73e-07 ***
+tax_comb3$illumina 0.849723   0.007799 108.956  < 2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 2.35 on 2598 degrees of freedom
-Multiple R-squared:  0.8125,	Adjusted R-squared:  0.8124 
-F-statistic: 1.126e+04 on 1 and 2598 DF,  p-value: < 2.2e-16
+Residual standard error: 2.3 on 2598 degrees of freedom
+Multiple R-squared:  0.8204,	Adjusted R-squared:  0.8204 
+F-statistic: 1.187e+04 on 1 and 2598 DF,  p-value: < 2.2e-16
 
 
 
