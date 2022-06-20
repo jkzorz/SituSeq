@@ -59,27 +59,19 @@ tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
 
 #trial with incomplete nanopore data
 #nano = read.csv("trial3_tax_df.csv",header = TRUE)
-nano = read.csv("Seaquencing_phylum_summary.csv",header = TRUE)
+nano = read.csv("Phylum_summary.csv",header = TRUE)
+colnames(nano) = gsub("barcode[0-9][0-9]_", "", colnames(nano))
+colnames(nano) = gsub("_combined", "", colnames(nano))
 #nano2 = nano %>% select(!c(X, max))
 #colnames(nano2)[2:ncol(nano2)] = paste("nano",  colnames(nano2)[2:ncol(nano2)], sep = "_")
 colnames(nano)[2:ncol(nano)] = paste("nano",  colnames(nano)[2:ncol(nano)], sep = "-")
-colnames(nano) = gsub("X", "", colnames(nano))
+nano$Phylum[is.na(nano$Phylum)] <- "Unknown"
 
 #join illumina and nanopore tables
 tax_comb = full_join(tax_df, nano, by = "Phylum")
 tax_comb2 = tax_comb %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance") %>% separate(Sample, into = c("Tech", "Sample"), sep = "-") 
 
-#change sample names from nanopore 
-#tax_comb2$Sample = gsub("barcode01", "2B1.C18.TinyBubbles.0.4", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode02", "2B1.C18.TinyBubbles.4.8", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode03", "2B1.C18.TinyBubbles.8.12", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode04", "2B1.C18.TinyBubbles.12.16", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode05", "2B1.C18.TinyBubbles.16.20", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode06", "2B1.C18.TinyBubbles.20.24", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode07", "2AT.E46.Transect175NW.0.4", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode09", "2AT.E46.Transect175NW.8.12", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode11", "2AT.E46.Transect175NW.16.20", tax_comb2$Sample)
-#tax_comb2$Sample = gsub("barcode12", "2AT.E46.Transect175NW.20.24", tax_comb2$Sample)
+
 
 
 #change underscores to periods in sample names 
@@ -90,9 +82,9 @@ tax_comb2$Sample = gsub("2B1.B22", "2B1", tax_comb2$Sample)
 tax_comb2$Sample = gsub("2B1.C18", "2B1", tax_comb2$Sample)
 tax_comb2$Sample = gsub("51.E21", "51", tax_comb2$Sample)
 tax_comb2$Sample = gsub("Transect","", tax_comb2$Sample)
+tax_comb2$Sample = gsub("0408", "4.8", tax_comb2$Sample)
 tax_comb2$Sample = gsub("04", "0.4", tax_comb2$Sample)
-tax_comb2$Sample = gsub("48", "4.8", tax_comb2$Sample)
-tax_comb2$Sample = gsub("812", "8.12", tax_comb2$Sample)
+tax_comb2$Sample = gsub("0812", "8.12", tax_comb2$Sample)
 tax_comb2$Sample = gsub("1216", "12.16", tax_comb2$Sample)
 tax_comb2$Sample = gsub("1620", "16.20", tax_comb2$Sample)
 tax_comb2$Sample = gsub("2024", "20.24", tax_comb2$Sample)
@@ -100,17 +92,18 @@ tax_comb2$Sample = gsub("2428", "24.28", tax_comb2$Sample)
 tax_comb2$Sample = gsub("2832", "28.32", tax_comb2$Sample)
 tax_comb2$Sample = gsub("3236", "32.36", tax_comb2$Sample)
 tax_comb2$Sample = gsub("3640", "36.40", tax_comb2$Sample)
+tax_comb2$Sample = gsub("2430", "24.30", tax_comb2$Sample)
 tax_comb2$Sample = gsub("51.Kilo.1.4", "51.Kilo.0.4", tax_comb2$Sample)
-tax_comb2$Sample = gsub("Clamshell.2430", "TinyBubbles.24.28", tax_comb2$Sample)
+
 
 
 tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance)
 tax_comb3[,3:4][is.na(tax_comb3[,3:4])] <- 0
-tax_comb3$Phylum2 = ifelse(tax_comb3$illumina > 2, tax_comb3$Phylum, "other")
+tax_comb3$Phylum2 = ifelse((tax_comb3$illumina+tax_comb3$nano) > 7, tax_comb3$Phylum, "other")
 
 
 #colour palette
-colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(20)
+colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(16)
 
 #scatter plot comparison 
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(0,53)) + scale_x_continuous(limits = c(0,53)) + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
