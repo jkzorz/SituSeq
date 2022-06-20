@@ -2,6 +2,8 @@
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 asv = read.csv("../../Illumina_reads/seaquencing_ASVseq_taxa_4analysis.csv")
 
+asv = asv %>% filter(Kingdom == "Bacteria")
+
 library(reshape2)
 library(tidyverse)
 asvm = melt(asv, id = c("ASVID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus"))
