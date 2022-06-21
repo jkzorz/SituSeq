@@ -47,9 +47,6 @@ head(out,12)
 write.csv(out, "Filtered_sequence_summary.csv")
 
 
-#can see distribution of sequence read lengths: 
-table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
-plot(table(nchar(getSequences('filtered/barcode01_filt.fastq.gz'))))
 
 #for loop for getting sequences and assigning taxonomy - with subsetting to 1000 reads
 for (fastq in filtFs) {
