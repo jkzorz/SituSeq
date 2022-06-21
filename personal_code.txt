@@ -1,5 +1,12 @@
 ####can do everything in R now... 
 
+#######################
+##parameters to set before running
+rarefaction_depth = 1000
+taxonomic_level = "Phylum"
+sample_number = 12
+
+
 #in R - load packages in this order to avoid masking issues
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 library(ShortRead)
@@ -48,11 +55,11 @@ write.csv(out, "Filtered_sequence_summary.csv")
 
 
 
-#for loop for getting sequences and assigning taxonomy - with subsetting to 1000 reads
+#for loop for getting sequences and assigning taxonomy - with subsetting to rarefaction depth
 for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
-sub = sample(1:length(seqs), 1000, replace=FALSE) 
+sub = sample(1:length(seqs), rarefaction_depth, replace=FALSE) 
 seq2 = seqs[sub]
 tax_rc = assignTaxonomy(seq2, "../../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 base = basename(fastq)
@@ -60,17 +67,6 @@ samples = gsub("_filt.fastq.gz", "", base)
 write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 }
 
-#Time for for loop of 5 samples (all sequences): system.time()
-# user   system  elapsed 
-#50500.41    69.48  7178.46 
-
-#Time for for loop of 5 samples (1000 sequence subset) ~7 minutes/sample: system.time()
-# user   system  elapsed 
-#12473.63    30.50  2162.59
-
-#Time for for loop of 10 samples (1000 sequence subset) 
-# user   system  elapsed 
-#25717.75    34.67  4300.14 
 
 #read in newly made csv files 
 temp = list.files(pattern="tax.*.csv")
@@ -93,7 +89,7 @@ write.csv(tax_df, "Phylum_summary.csv")
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
 #colour scheme - 12 colours for max 12 barcodes
-colours = c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black')
+colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
 
 
 #bubble plot
