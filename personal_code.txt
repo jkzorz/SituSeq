@@ -1,7 +1,7 @@
 ####can do everything in R now... 
 
 #in R - load packages in this order to avoid masking issues
-setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/fastq_pass_combined/")
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 library(ShortRead)
 library(dada2)
 library(tidyverse)
