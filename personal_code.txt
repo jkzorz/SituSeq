@@ -44,6 +44,8 @@ names(filtFs) = sample.names
 out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1800, minLen = 1200,  truncQ = 0, compress = FALSE)
 #see how many reads were lost
 head(out,12) 
+write.csv(out, "Filtered_sequence_summary.csv")
+
 
 #can see distribution of sequence read lengths: 
 table(nchar(getSequences('filtered/barcode01_filt.fastq.gz')))
