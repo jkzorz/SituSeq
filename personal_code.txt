@@ -1,14 +1,18 @@
 ####can do everything in R now... 
 
-#######################
+##########################################
 ##parameters to set before running
 rarefaction_depth = 1000
 taxonomic_level = "Phylum"
 sample_number = 12
+path_to_taxonomy_database = ""
+path_to_working_directory = ""
 
+
+########################################
 
 #in R - load packages in this order to avoid masking issues
-setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
+setwd(path_to_working_directory)
 library(ShortRead)
 library(dada2)
 library(tidyverse)
