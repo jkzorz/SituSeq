@@ -33,5 +33,5 @@ blastn -query ../Illumina/ASVseqs.fasta -db Nanopore_DB -outfmt 6 -out blast_res
 conda activate seqkit
 
 seqkit rmdup -s < Nanopore_all_seqs.fasta > Nanopore_all_seqs_rmdup.fasta
-
+#no sequences removed anyway - all unique 
 
