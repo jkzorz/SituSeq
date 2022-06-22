@@ -28,3 +28,10 @@ blastn -query ../Illumina/ASVseqs.fasta -db Nanopore_DB -outfmt 6 -out blast_res
 #address: -max_target_seqs 1 simply returns the first good hit found in the database, not the best hit as one would assume. Also depends on db order
 #potentially can increase threshold in order to make sure best hit is found 
 
+
+#remove duplicates from fasta file 
+conda activate seqkit
+
+seqkit rmdup -s < Nanopore_all_seqs.fasta > Nanopore_all_seqs_rmdup.fasta
+
+
