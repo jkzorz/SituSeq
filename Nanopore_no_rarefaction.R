@@ -6,7 +6,7 @@
 taxonomic_level = "Phylum"
 sample_number = 40
 
-
+#######################
 #in R - load packages in this order to avoid masking issues
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 library(ShortRead)
@@ -115,7 +115,7 @@ tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df2_long$Sample)
 
 #bar plot of most abundant phyla
-gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "black", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
+gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "white", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
 gg
 #save plot
 ggsave("bar_plot_top_phyla.png", height = 6, width = 5)
