@@ -144,10 +144,11 @@ saveRDS(seqtab, "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analy
 
 ######################################################
 ###Merge runs here 
-
-
+st1 <- readRDS("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run1/seqtab_run1.rds")
+st2 <- readRDS("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run2/seqtab_run2.rds")
+st.all <- mergeSequenceTables(st1, st2)
 ###Remove chimeras
-seqtab.nochim = removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
+seqtab.nochim <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
 
 #Sequences remaining after chimera removal.
 dim(seqtab.nochim) 
