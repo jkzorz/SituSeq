@@ -205,7 +205,7 @@ write.fasta(uniqueSeqs, seqnum, "ASVseqs.fasta")
 
 
 #assign taxonomy
- taxa = assignTaxonomy(seqtab2.nochim, "silva_nr99_v138.1_train_set.fa.gz", multithread = TRUE)
+ taxa = assignTaxonomy(seqtab2.nochim, "../../silva_nr99_v138.1_train_set.fa.gz", multithread = TRUE)
 
 #taxa2 = addSpecies(taxa, "silva_species_assignment_v138.1.fa.gz")
 #memory error with addSpecies, might not be necessary anyway
