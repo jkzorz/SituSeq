@@ -55,8 +55,8 @@ write.csv(out, "filterandtrim_seaquencing.csv")
 ##############################################
 filtpathF <- "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run1" # CHANGE ME to the directory containing your filtered forward fastqs
 filtpathR <- "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run1" # CHANGE ME ...
-filtFs <- list.files(filtpathF, pattern="fastq.gz", full.names = TRUE)
-filtRs <- list.files(filtpathR, pattern="fastq.gz", full.names = TRUE)
+filtFs <- list.files(filtpathF, pattern="F_filt.fastq.gz", full.names = TRUE)
+filtRs <- list.files(filtpathR, pattern="R_filt.fastq.gz", full.names = TRUE)
 sample.names <- sapply(strsplit(basename(filtFs), "_"), `[`, 1) # Assumes filename = samplename_XXX.fastq.gz
 sample.namesR <- sapply(strsplit(basename(filtRs), "_"), `[`, 1) # Assumes filename = samplename_XXX.fastq.gz
 if(!identical(sample.names, sample.namesR)) stop("Forward and reverse files do not match.")
@@ -91,8 +91,8 @@ saveRDS(seqtab, "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analy
 #Needs to be done for each run separately - Run2
 filtpathF <- "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run2" # CHANGE ME to the directory containing your filtered forward fastqs
 filtpathR <- "~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation/run2" # CHANGE ME ...
-filtFs <- list.files(filtpathF, pattern="fastq.gz", full.names = TRUE)
-filtRs <- list.files(filtpathR, pattern="fastq.gz", full.names = TRUE)
+filtFs <- list.files(filtpathF, pattern="F_filt.fastq.gz", full.names = TRUE)
+filtRs <- list.files(filtpathR, pattern="R_filt.fastq.gz", full.names = TRUE)
 sample.names <- sapply(strsplit(basename(filtFs), "_"), `[`, 1) # Assumes filename = samplename_XXX.fastq.gz
 sample.namesR <- sapply(strsplit(basename(filtRs), "_"), `[`, 1) # Assumes filename = samplename_XXX.fastq.gz
 if(!identical(sample.names, sample.namesR)) stop("Forward and reverse files do not match.")
