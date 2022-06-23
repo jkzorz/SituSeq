@@ -23,7 +23,7 @@ blastn -query ../Illumina/seaquencing_ASVseqs.fasta -db Nanopore_DB -outfmt 6 -o
  blastn -query ../Illumina/ASVseqs.fasta -db Nanopore_DB -outfmt 6 -out blast_results_1target_97.tbl -max_target_seqs 1 -perc_identity 97
 
 #increase max number of target seqs to see how many Nanopore sequences each Illumina ASV hits
-blastn -query ../Illumina/ASVseqs.fasta -db Nanopore_DB -outfmt 6 -out blast_results_1target_100_1000seqs.tbl -max_target_seqs 1000 -perc_identity 97
+blastn -query ../Illumina/ASVseqs.fasta -db Nanopore_DB -outfmt 6 -out blast_results_1target_100_1000seqs.tbl -max_target_seqs 1000 -perc_identity 100
 
 #address: -max_target_seqs 1 simply returns the first good hit found in the database, not the best hit as one would assume. Also depends on db order
 #potentially can increase threshold in order to make sure best hit is found 
