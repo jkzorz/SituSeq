@@ -1,4 +1,9 @@
 #Command for subsampling Nanopore 16S sequences from taxonomy files 
+
+
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass/Seaquences-no-rarefaction")
+library(tidyverse)
+
 temp = list.files(pattern="tax.*.csv")
 temp_list = list()
 for (i in 1:length(temp)) {
@@ -17,3 +22,7 @@ for (i in 1:length(temp)) {
 
 #merge all data frames in list
 tax_df = temp_list %>% reduce(full_join, by='Phylum')
+
+
+#write phylum summary 
+write.csv(tax_df, "Phylum_summary_5000.csv")
