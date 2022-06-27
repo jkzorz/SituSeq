@@ -92,7 +92,7 @@ write.csv(tax_df, "Phylum_summary.csv")
 #long format
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
-#colour scheme - 12 colours for max 12 barcodes
+#colour scheme 
 colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
 
 #remove "_combined" from sample name
