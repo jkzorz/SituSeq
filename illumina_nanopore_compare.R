@@ -65,7 +65,7 @@ tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
 
 #trial with incomplete nanopore data
 #nano = read.csv("trial3_tax_df.csv",header = TRUE)
-nano = read.csv("Phylum_summary.csv",header = TRUE)
+nano = read.csv("Seaquences-no-rarefaction/Phylum_summary.csv",header = TRUE)
 colnames(nano) = gsub("barcode[0-9][0-9]_", "", colnames(nano))
 colnames(nano) = gsub("_combined", "", colnames(nano))
 #nano2 = nano %>% select(!c(X, max))
@@ -117,6 +117,10 @@ gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Ph
 
 #scatter plot comparison log scale 
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(NA,85), trans = "log10") + scale_x_continuous(limits = c(NA,85), trans = "log10") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+
+#scatter plot comparison sqrt scale - with 1:1 line
+ gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm", colour = 'red') + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+
 
 #summarize by phylum - create ratio column
 tax_comb3$Ratio = tax_comb3$illumina/tax_comb3$nano
