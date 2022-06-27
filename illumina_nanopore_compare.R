@@ -1,11 +1,13 @@
 
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
-asv = read.csv("../../Illumina_reads/seaquencing_ASVseq_taxa_4analysis.csv")
-
-asv = asv %>% filter(Kingdom == "Bacteria")
+asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
 
 library(reshape2)
 library(tidyverse)
+
+asv = asv %>% filter(Kingdom == "Bacteria")
+
+
 asvm = melt(asv, id = c("ASVID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus"))
 
 
@@ -30,6 +32,8 @@ fun = function(i){
     x = i[sub,]}
 
 asvm_sub = lapply(asvm_split, fun)
+#no rarefaction
+#asvm_sub = asvm_split
 
 #apply phyla summary and abundance
 fun2 = function(i){
