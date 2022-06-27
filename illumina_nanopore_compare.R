@@ -140,14 +140,15 @@ xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xinterc
 #max abundance
 xx = ggplot(tax_comb5, aes(x = avg_ratio_illum, y = Phylum))+ geom_vline(xintercept =1, colour = "red", alpha = 0.25) + geom_point(aes(size = max_illum, colour= max_nano)) + labs(x = "Illumina abundance : Nanopore abundance", y = "", size = "Max Illumina \nabundance (%)", colour = "Max Nanopore \nabundance (%)" ) +theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99")) + scale_x_continuous(trans = "log10", breaks = c(0.125, 0.25, 0.5, 1, 2, 4, 8)) + scale_radius(breaks = c(1,10,20,40), range = c(1,6)) + scale_colour_gradient(high = "#28393E", low = "#90ADB6")
 
-#correlation - pearson
+#correlation - pearson - no rarefaction
  cor(tax_comb3$illumina, tax_comb3$nano)
-0.9013775
+0.9081141
 
-#correlation - spearman 
+#correlation - spearman - no rarefaction
 cor(tax_comb3$illumina, tax_comb3$nano, method = "spearman")
-0.8371021
+ 0.8869522
 
+#no rarefaction
 s = lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 summary(s)
 Call:
@@ -155,18 +156,18 @@ lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--22.016  -0.231  -0.231  -0.101  37.996 
+-21.254  -0.224  -0.224  -0.122  38.228 
 
 Coefficients:
                    Estimate Std. Error t value Pr(>|t|)    
-(Intercept)        0.231196   0.046668   4.954 7.73e-07 ***
-tax_comb3$illumina 0.849723   0.007799 108.956  < 2e-16 ***
+(Intercept)        0.223766   0.043116    5.19 2.26e-07 ***
+tax_comb3$illumina 0.845601   0.007424  113.90  < 2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 2.3 on 2598 degrees of freedom
-Multiple R-squared:  0.8204,	Adjusted R-squared:  0.8204 
-F-statistic: 1.187e+04 on 1 and 2598 DF,  p-value: < 2.2e-16
+Residual standard error: 2.193 on 2758 degrees of freedom
+Multiple R-squared:  0.8247,	Adjusted R-squared:  0.8246 
+F-statistic: 1.297e+04 on 1 and 2758 DF,  p-value: < 2.2e-16
 
 
 
@@ -181,7 +182,7 @@ yym = as.matrix(yy2[,2:ncol(yy2)])
 set.seed(123)
 
 nmds = metaMDS(yym, distance = "bray")
-#Stress:    0.1259655 
+#Stress: 0.09994489 
 
 data.scores = as.data.frame(scores(nmds)$sites)
 data.scores$Name = yy2$Name
@@ -204,17 +205,17 @@ xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Su
   
  
  
-###Anosim and Mantel tests
+###Anosim and Mantel tests - no rarefaction
 ano = anosim(yym, data.scores$Tech, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.06113 
-      #Significance: 0.0079
+#ANOSIM statistic R: 0.06384
+      #Significance: 0.006
 
 ano = anosim(yym, data.scores$Site, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.4584 
+#ANOSIM statistic R: 0.4657 
      # Significance: 1e-04 
 
 ano = anosim(yym, data.scores$Subsite, distance = "bray", permutations = 9999)
-#ANOSIM statistic R: 0.3766 
+#ANOSIM statistic R: 0.3814 
 #Significance: 1e-04 
 
 
@@ -223,7 +224,7 @@ dist.abund = vegdist(yym, method = "bray")
 dist.temp = dist(data.scores$Depth1, method = "euclidean")
 abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
 
-#Mantel statistic r: 0.3337  
+#Mantel statistic r: 0.3333  
      # Significance: 1e-04 
 
 aa = as.vector(dist.abund)
