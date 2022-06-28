@@ -2,11 +2,11 @@
 
 ##########################################
 ##parameters to set before running
-rarefaction_depth = 1000
-taxonomic_level = "Phylum"
-sample_number = 12
+rarefaction_depth = 100
+taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
+sample_number = 40
 path_to_taxonomy_database = "../../silva_nr99_v138.1_train_set.fa.gz"
-path_to_working_directory = ""
+path_to_working_directory = "."
 
 
 ########################################
@@ -78,19 +78,20 @@ temp_list = list()
 for (i in 1:length(temp)) {
     sample = gsub(".csv", "", temp[[i]])
     sample2 = gsub("tax.","",sample)
-    new = read.csv(temp[i]) %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
-    colnames(new) = c("Phylum", sample2)
-temp_list[[length(temp_list) + 1]] <- new }
+    new = read.csv(temp[i], header = TRUE) 
+    new2 = new %>% filter(Kingdom == "Bacteria") %>% select(taxonomic_level) %>% group_by_all() %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
+    colnames(new2) = c(taxonomic_level, sample2)
+    temp_list[[length(temp_list) + 1]] <- new2 }
 
 
 #merge all data frames in list
-tax_df = temp_list %>% reduce(full_join, by='Phylum')
+tax_df = temp_list %>% reduce(full_join, by=taxonomic_level)
 
 #write phylum summary csv
-write.csv(tax_df, "Phylum_summary.csv")
+write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"))
 
 #long format
-tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df_long = tax_df %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
 
 #colour scheme 
 colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
