@@ -146,6 +146,12 @@ tax_comb4$Phylum <- factor(tax_comb4$Phylum,levels=unique(tax_comb4$Phylum))
 xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10") + labs(y = "", x = "Illumina abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
 
 
+#### just choose high abundance phyla
+chloro = tax_comb4 %>% filter(Phylum == "Campylobacterota" | Phylum == "Proteobacteria" | Phylum == "Caldatribacteriota" | Phylum == "Planctomycetota" | Phylum == "Chloroflexi" | Phylum == "Desulfobacterota" | Phylum == "Bacteroidota" | Phylum == "Unknown" | Phylum == "Latescibacterota" | Phylum == "Acidobacteriota" | Phylum == "Cyanobacteria" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Actinobacteriota")
+
+xx = ggplot(chloro, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10", breaks = c(0.1, 0.25,0.5, 1,2,4,10)) + labs(y = "", x = "Illumina abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
+
+
 #correlation - pearson - no rarefaction
  cor(tax_comb3$illumina, tax_comb3$nano)
 0.9081141
