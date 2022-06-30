@@ -2,7 +2,7 @@
 
 ##########################################
 ##parameters to set before running
-rarefaction_depth = 100
+rarefaction_depth = 1000 #for no rarefaction substitute number for: length(seqs)
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
 sample_number = 40
 path_to_taxonomy_database = "../../silva_nr99_v138.1_train_set.fa.gz"
