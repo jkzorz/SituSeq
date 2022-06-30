@@ -59,3 +59,8 @@ abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9
 #r: 0.2982, p < 1e-4
 
 
+
+#indicator species 
+inv = multipatt(m_com, data.scores2$Site, func = "r.g", control = how(nperm=9999))
+summary(inv)
+
