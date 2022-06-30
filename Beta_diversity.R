@@ -43,3 +43,19 @@ data.scores2$Depth = gsub("2430", "24", data.scores2$Depth)
 xx = ggplot(data.scores2, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Site, size = as.numeric(Depth))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
 
 
+#anosim
+#site
+ano = anosim(m_com, data.scores2$Site, distance = "bray", permutations = 9999)
+#R: 0.4728, p< 1e-4
+
+#subsite
+ano = anosim(m_com, data.scores2$Subsite, distance = "bray", permutations = 9999)
+#R: 0.3571, p<1e-4
+
+#mantel
+dist.abund = vegdist(m_com, method = "bray")
+dist.temp = dist(data.scores2$Depth, method = "euclidean")
+abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
+#r: 0.2982, p < 1e-4
+
+
