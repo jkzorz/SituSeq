@@ -38,6 +38,8 @@ data.scores2$Depth = gsub("3640", "36", data.scores2$Depth)
 data.scores2$Depth = gsub("2430", "24", data.scores2$Depth)
 
 
+ xx = ggplot(data.scores2, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite, size = as.numeric(Depth))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
 
+xx = ggplot(data.scores2, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Site, size = as.numeric(Depth))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
 
 
