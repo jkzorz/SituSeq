@@ -1,4 +1,4 @@
-
+###Illumina data set rarefaction
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
 
@@ -50,34 +50,25 @@ colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
 colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
 
-#reorder and remove samples according to what was sequenced on Nanopore
-#tax_df2 = tax_df[,c(1,10,11,12,13,14,15,2,3,4,5,6,7)]
-
-#to be continued...
 
 
 ###########################################
-#test run without barcodes 8 and 10
-#tax_df3 = tax_df[,c(1,10,11,12,13,14,15,2,4,6,7)]
-#colnames(tax_df3)[2:ncol(tax_df3)] = paste("illumina",  colnames(tax_df3)[2:ncol(tax_df3)], sep = "_")
+
+
 colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
 tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
 
-#trial with incomplete nanopore data
-#nano = read.csv("trial3_tax_df.csv",header = TRUE)
+#nanopore data
 nano = read.csv("Seaquences-no-rarefaction/Phylum_summary.csv",header = TRUE)
 colnames(nano) = gsub("barcode[0-9][0-9]_", "", colnames(nano))
 colnames(nano) = gsub("_combined", "", colnames(nano))
-#nano2 = nano %>% select(!c(X, max))
-#colnames(nano2)[2:ncol(nano2)] = paste("nano",  colnames(nano2)[2:ncol(nano2)], sep = "_")
+
 colnames(nano)[2:ncol(nano)] = paste("nano",  colnames(nano)[2:ncol(nano)], sep = "-")
 nano$Phylum[is.na(nano$Phylum)] <- "Unknown"
 
 #join illumina and nanopore tables
 tax_comb = full_join(tax_df, nano, by = "Phylum")
 tax_comb2 = tax_comb %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance") %>% separate(Sample, into = c("Tech", "Sample"), sep = "-") 
-
-
 
 
 #change underscores to periods in sample names 
@@ -247,7 +238,7 @@ at2 = ggplot(at, aes(x = aa, y = tt)) + geom_point(alpha = 0.5) + theme_bw() + l
 
 
 ##### 
-##Relative abundance of Illumina dataset 
+##Relative abundance of Illumina dataset - no rarefaction
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
 
@@ -260,14 +251,22 @@ asv = asv %>% filter(Kingdom == "Bacteria")
 abund = asv[,2:41]
 sums = colSums(abund)
 abund2 = t(t(abund)/sums*100)
-abund3 = data.frame(Genus = asv$Genus, abund2) 
-abund4 = abund3 %>% group_by(Genus) %>% summarize_all(list(sum))
-abund4$Genus[is.na(abund4$Genus)] <- "Unknown"
+abund3 = data.frame(Phylum = asv$Phylum, abund2) 
+abund4 = abund3 %>% group_by(Phylum) %>% summarize_all(list(sum))
+abund4$Phylum[is.na(abund4$Phylum)] <- "Unknown"
 
-y = abund4 %>% filter(Genus == "Unknown") 
+#for calculating average abundance of "Unknown" classifications
+y = abund4 %>% filter(Phylum == "Unknown") 
 mean(as.matrix(y[,2:ncol(y)]))
 sd(as.matrix(y[,2:ncol(y)]))
 
+tax_df = abund4
+colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
+colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
+
+colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
 
 
 
