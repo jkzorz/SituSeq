@@ -49,3 +49,19 @@ cat /work/ebg_lab/gm/gapp/jzorz/Atlantic_Condor/Seaquencing/Nanopore/tax_barcode
 ##example to search for Nanopore Sequence, get sequence, and then use that to search for taxonomy in tax_bacode_all.csv
  grep "SEQ633675 " Nanopore_all_seqs_numbers_singleline.fasta -A1 | tail -n 1 | grep -f - tax_barcode_all.csv
 
+
+
+###
+#In R... 
+#count number of ASVs with greater >97% identity over 230 bp. 
+#Need to first remove any ASV IDs that are not from Bacteria classification 
+x = read.csv("blast_97_asv_compare.csv", header = TRUE)
+new <- ifelse(x$Illumina_blast %in% x$Illumina_No_Arch, x$Illumina_blast, NA)
+new2 = na.omit(new)
+length(new2)
+length(new)
+
+
+
+
+
