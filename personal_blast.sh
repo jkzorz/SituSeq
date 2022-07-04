@@ -38,6 +38,9 @@ seqkit rmdup -s < Nanopore_all_seqs.fasta > Nanopore_all_seqs_rmdup.fasta
 
 
 #add short seq names to Nanopore sequences
+awk '{for(x=1;x<=NF;x++)if($x~/>/){sub(/>/,">SEQ"++i" ")}}1' Nanopore_all_seqs.fasta > Nanopore_all_seqs_numbers.fasta
 
-#awk '{for(x=1;x<=NF;x++)if($x~/>/){sub(/>/,SEQ++i)}}1' Nanopore_all_seqs.fasta > Nanopore_all_seqs_numbers.fasta
+#redo blast with updated sequence names
+makeblastdb -in Nanopore_all_seqs_numbers.fasta -out Nanopore_DB -dbtype nucl
+
 
