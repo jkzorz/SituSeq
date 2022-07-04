@@ -43,4 +43,6 @@ awk '{for(x=1;x<=NF;x++)if($x~/>/){sub(/>/,">SEQ"++i" ")}}1' Nanopore_all_seqs.f
 #redo blast with updated sequence names
 makeblastdb -in Nanopore_all_seqs_numbers.fasta -out Nanopore_DB -dbtype nucl
 
+##example to search for Nanopore Sequence, get sequence, and then use that to search for taxonomy in tax_bacode_all.csv
+ grep "SEQ633675 " Nanopore_all_seqs_numbers_singleline.fasta -A1 | tail -n 1 | grep -f - tax_barcode_all.csv
 
