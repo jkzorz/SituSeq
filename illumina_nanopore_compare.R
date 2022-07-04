@@ -246,5 +246,28 @@ at = data.frame(aa = aa, tt = tt)
 at2 = ggplot(at, aes(x = aa, y = tt)) + geom_point(alpha = 0.5) + theme_bw() + labs(x = "Bray Curtis Dissimilarity between samples", y = "Depth (cm) between samples") 
 
 
+##### 
+##Relative abundance of Illumina dataset 
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
+asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
+
+library(reshape2)
+library(tidyverse)
+
+asv = asv %>% filter(Kingdom == "Bacteria")
+
+
+abund = asv[,2:41]
+sums = colSums(abund)
+abund2 = t(t(abund)/sums*100)
+abund3 = data.frame(Genus = asv$Genus, abund2) 
+abund4 = abund3 %>% group_by(Genus) %>% summarize_all(list(sum))
+abund4$Genus[is.na(abund4$Genus)] <- "Unknown"
+
+y = abund4 %>% filter(Genus == "Unknown") 
+mean(as.matrix(y[,2:ncol(y)]))
+sd(as.matrix(y[,2:ncol(y)]))
+
+
 
 
