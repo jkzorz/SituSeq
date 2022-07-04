@@ -61,6 +61,17 @@ new2 = na.omit(new)
 length(new2)
 length(new)
 
+#Percentage without blast hits 
+ x = read.csv("blast_97_asv_compare.csv", header = TRUE)
+ new <- ifelse(x$Illumina_No_Arch %in% x$Illumina_blast, NA, x$Illumina_No_Arch)
+ new2 = na.omit(new)
+ x2 <- x[x$Illumina_No_Arch %in% new2, -1]
+ #write.csv(x2, "Blast_no_matches_Illumina.csv")
+ 
+ #summarize ASVs without blast hits by phylum
+  x3 = x2 %>% group_by(Phylum) %>% summarize(n = n())
+ 
+
 
 
 
