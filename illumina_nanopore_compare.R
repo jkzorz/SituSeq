@@ -1,4 +1,6 @@
-###Illumina data set rarefaction
+
+##### 
+##Relative abundance of Illumina dataset - no rarefaction
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
 
@@ -8,55 +10,33 @@ library(tidyverse)
 asv = asv %>% filter(Kingdom == "Bacteria")
 
 
-asvm = melt(asv, id = c("ASVID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus"))
+abund = asv[,2:41]
+sums = colSums(abund)
+abund2 = t(t(abund)/sums*100)
+abund3 = data.frame(Phylum = asv$Phylum, abund2) 
+abund4 = abund3 %>% group_by(Phylum) %>% summarize_all(list(sum))
+abund4$Phylum[is.na(abund4$Phylum)] <- "Unknown"
 
+#for calculating average abundance of "Unknown" classifications
+y = abund4 %>% filter(Phylum == "Unknown") 
+mean(as.matrix(y[,2:ncol(y)]))
+sd(as.matrix(y[,2:ncol(y)]))
 
-#library(data.table)
-library(splitstackshape)
-
-asvm0 = asvm %>% filter(value != 0)
-
-#error repeating on value column didn't work
-#asvm2 = expandRows(asvm0, asvm0$value)
-#repeating on 9th column (which is value column did for some reason)
-asvm2 = expandRows(asvm0, count = 9)
-
-
-asvm_split = split(asvm2, asvm2$variable)
-
-
-
-#to apply to all elements of asvm list
-fun = function(i){
-    sub = sample(1:nrow(i), 1000, replace=FALSE)
-    x = i[sub,]}
-
-asvm_sub = lapply(asvm_split, fun)
-#no rarefaction
-#asvm_sub = asvm_split
-
-#apply phyla summary and abundance
-fun2 = function(i){
-    phy = i %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
-    }
-phylum_sum = lapply(asvm_sub, fun2)    
-
-tax_df = phylum_sum %>% reduce(full_join, by='Phylum')
-colnames(tax_df) = c("Phylum", names(phylum_sum))
-
-#shorten column names 
+tax_df = abund4
 colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
 colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
 
+colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
+
+#write.csv(tax_df, "../../Illumina_reads/run_separation/Illumina_Phylum_summary.csv")
+
+
 
 
 ###########################################
 
-
-colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
-tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
 
 #nanopore data
 nano = read.csv("Seaquences-no-rarefaction/Phylum_summary.csv",header = TRUE)
@@ -100,7 +80,7 @@ tax_comb3$Phylum2 = ifelse((tax_comb3$illumina+tax_comb3$nano) > 7, tax_comb3$Ph
 
 
 #colour palette
-colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(16)
+colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(20)
 
 #scatter plot comparison 
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(0,85)) + scale_x_continuous(limits = c(0,85)) + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
@@ -237,8 +217,22 @@ at = data.frame(aa = aa, tt = tt)
 at2 = ggplot(at, aes(x = aa, y = tt)) + geom_point(alpha = 0.5) + theme_bw() + labs(x = "Bray Curtis Dissimilarity between samples", y = "Depth (cm) between samples") 
 
 
-##### 
-##Relative abundance of Illumina dataset - no rarefaction
+
+########
+##Indicator Species 
+
+ tax_comb6 = tax_comb3 %>% select(Phylum, Sample, illumina, nano) %>% pivot_longer(cols = c(illumina, nano), names_to = "tech", values_to = "Abundance")
+
+tax_comb6$Sample2 = paste0(tax_comb6$Sample,"_", tax_comb6$tech)
+tax_comb7 = tax_comb6 %>% pivot_wider(names_from = Phylum, id_cols= Sample2, values_from = Abundance)
+tax_comb8 = tax_comb7 %>% separate(Sample2, into = c("Sample", "Tech"), sep = "_")
+abund = tax_comb8[,3:ncol(tax_comb8)]
+tech = tax_comb8$Tech
+inv = multipatt(abund, tech, func = "r.g", control = how(nperm=9999))
+summary(inv)
+
+
+###Illumina data set rarefaction
 setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
 asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
 
@@ -248,25 +242,49 @@ library(tidyverse)
 asv = asv %>% filter(Kingdom == "Bacteria")
 
 
-abund = asv[,2:41]
-sums = colSums(abund)
-abund2 = t(t(abund)/sums*100)
-abund3 = data.frame(Phylum = asv$Phylum, abund2) 
-abund4 = abund3 %>% group_by(Phylum) %>% summarize_all(list(sum))
-abund4$Phylum[is.na(abund4$Phylum)] <- "Unknown"
+asvm = melt(asv, id = c("ASVID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus"))
 
-#for calculating average abundance of "Unknown" classifications
-y = abund4 %>% filter(Phylum == "Unknown") 
-mean(as.matrix(y[,2:ncol(y)]))
-sd(as.matrix(y[,2:ncol(y)]))
 
-tax_df = abund4
+#library(data.table)
+library(splitstackshape)
+
+asvm0 = asvm %>% filter(value != 0)
+
+#error repeating on value column didn't work
+#asvm2 = expandRows(asvm0, asvm0$value)
+#repeating on 9th column (which is value column did for some reason)
+asvm2 = expandRows(asvm0, count = 9)
+
+
+asvm_split = split(asvm2, asvm2$variable)
+
+
+
+#to apply to all elements of asvm list
+fun = function(i){
+    sub = sample(1:nrow(i), 1000, replace=FALSE)
+    x = i[sub,]}
+
+asvm_sub = lapply(asvm_split, fun)
+#no rarefaction
+#asvm_sub = asvm_split
+
+#apply phyla summary and abundance
+fun2 = function(i){
+    phy = i %>% filter(Kingdom == "Bacteria") %>% group_by(Phylum) %>% summarise(n = n()) %>% mutate(abund = n/(colSums(as.matrix(n)))*100) %>% select(-n)
+    }
+phylum_sum = lapply(asvm_sub, fun2)    
+
+tax_df = phylum_sum %>% reduce(full_join, by='Phylum')
+colnames(tax_df) = c("Phylum", names(phylum_sum))
+
+#shorten column names 
 colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
 colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
 colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
 
+
+
 colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
-
-
-
+tax_df$Phylum[is.na(tax_df$Phylum)] <- "Unknown"
