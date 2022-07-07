@@ -25,3 +25,11 @@ rm(seqs)
 tax_rc = assignTaxonomy(seq2, "../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, "Mock_community_nanopore_taxonomy.csv")
 
+
+
+
+###Illumina sequences
+library(dada2); packageVersion("dada2")
+library(seqinr)
+
+
