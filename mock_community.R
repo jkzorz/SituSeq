@@ -25,6 +25,10 @@ rm(seqs)
 tax_rc = assignTaxonomy(seq2, "../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE)
 write.csv(tax_rc, "Mock_community_nanopore_taxonomy.csv")
 
+#assign taxonomy with minboot 80
+tax_rc = assignTaxonomy(seq2, "../silva_nr99_v138.1_train_set.fa.gz", multithread=TRUE, tryRC = TRUE, minBoot = 80)
+write.csv(tax_rc, "Mock_community_nanopore_taxonomy_minboot80.csv")
+
 #try adding species
 taxa <- addSpecies(tax_rc, "../silva_species_assignment_v138.1.fa.gz")
 write.csv(taxa, "Mock_community_nanopore_taxonomy_with_species.csv")
