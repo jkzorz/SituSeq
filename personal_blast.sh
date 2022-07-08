@@ -73,6 +73,14 @@ length(new)
  
 
 
+####Phyloflash Blast
+#concatenate Phyloflash sequences
+cat *.fasta > PhyloFlash_16S_seqs.fa
+
+blastn -query ../PhyloFlash/PhyloFlash_16S_seqs.fa -db Nanopore_DB -outfmt 6 -out blast_results_Phyloflash_97.tbl -max_target_seqs 5 -perc_identity 97
+
+
+
 
 
 
