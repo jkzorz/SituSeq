@@ -88,16 +88,27 @@ tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance
 tax_comb3[,3:5][is.na(tax_comb3[,3:5])] <- 0
 
 
-tax_comb3$Phylum2 = ifelse((tax_comb3$illumina+tax_comb3$nano) > 7, tax_comb3$Phylum, "other")
+tax_comb3$Phylum2 = ifelse((tax_comb3$nano+tax_comb3$PF) > 5, tax_comb3$Phylum, "other")
 
-tax_comb4 = tax_comb3 %>% filter(Sample == "2A2.PurpleHaze.0.4" | Sample == "2A2.PurpleHaze.12.16" | Sample == "2A2.PurpleHaze.24.28" | Sample == "2AT.175NW.0.4" | Sample == "2AT.175NW.24.28" | Sample == "2B1.TinyBubbles.0.4" | Sample == "2B1.TinyBubbles.12.16" | Sample == "2B1.TinyBubbles.20.24" | Sample == "2B1.TinyBubbles.24.30" ) 
+tax_comb8 = tax_comb3 %>% filter(Sample == "2A2.PurpleHaze.0.4" | Sample == "2A2.PurpleHaze.12.16" | Sample == "2A2.PurpleHaze.24.28" | Sample == "2AT.175NW.0.4" | Sample == "2AT.175NW.24.28" | Sample == "2B1.TinyBubbles.0.4" | Sample == "2B1.TinyBubbles.12.16" | Sample == "2B1.TinyBubbles.20.24" | Sample == "2B1.TinyBubbles.24.30" ) 
+
+colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(22)
 
 
-cor(tax_comb4$PF, tax_comb4$illumina, method = "pearson")
+##scatter plot
+#PF vs nano
+gg = ggplot(tax_comb8, aes(x = PF, y = nano))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm", colour = 'red') + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "PhyloFlash abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 
-cor(tax_comb4$PF, tax_comb4$nano, method = "pearson")
 
-cor(tax_comb4$nano, tax_comb4$illumina, method = "pearson")
+#illumina vs PF
+ gg = ggplot(tax_comb8, aes(x = PF, y = illumina))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm", colour = 'red') + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "PhyloFlash abundance (%)", y = "Illumina abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+
+
+cor(tax_comb8$PF, tax_comb8$illumina, method = "pearson")
+
+cor(tax_comb8$PF, tax_comb8$nano, method = "pearson")
+
+cor(tax_comb8$nano, tax_comb8$illumina, method = "pearson")
 
 
 
