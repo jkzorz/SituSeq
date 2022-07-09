@@ -111,6 +111,43 @@ cor(tax_comb8$PF, tax_comb8$nano, method = "pearson")
 cor(tax_comb8$nano, tax_comb8$illumina, method = "pearson")
 
 
+####
+tax_comb3 = tax_comb8
+
+tax_comb3$Ratio = tax_comb3$PF/tax_comb3$nano
+tax_comb3$Ratio[!is.finite(tax_comb3$Ratio)] <- NA
+tax_comb3$Ratio2 = tax_comb3$nano/tax_comb3$PF
+tax_comb3$Ratio2[!is.finite(tax_comb3$Ratio2)] <- NA
+tax_comb4 = tax_comb3 %>% group_by(Phylum) %>% summarise(avg_ratio_illum = mean(Ratio, na.rm = TRUE),  avg_illum = mean(illumina), avg_nano = mean(nano), max_illum = max(illumina), max_nano = max(nano))
+#tax_comb4$ratio_combo = ifelse(tax_comb4$avg_ratio_illum >1, tax_comb4$avg_ratio_illum, tax_comb4$avg_ratio_nano)
+#tax_comb5 <- tax_comb4[order(-tax_comb4$ratio_combo),]\
+tax_comb5 <- tax_comb4[order(-tax_comb4$avg_ratio_illum),]
+tax_comb5$Phylum <- factor(tax_comb5$Phylum,levels=unique(tax_comb5$Phylum))
+tax_comb5 = tax_comb5[complete.cases(tax_comb5[ , 2]),]
+tax_comb5 = tax_comb5[tax_comb5$avg_ratio_illum>0,]
+
+tax_comb4 <- tax_comb3[order(-tax_comb3$Ratio),]
+tax_comb4$Phylum <- factor(tax_comb4$Phylum,levels=unique(tax_comb4$Phylum))
+xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10") + labs(y = "", x = "Illumina abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
+
+#### just choose high abundance phyla
+chloro = tax_comb4 %>% filter(Phylum == "Campylobacterota" | Phylum == "Calditrichota" | Phylum == "Proteobacteria" | Phylum == "Caldatribacteriota" | Phylum == "Planctomycetota" | Phylum == "Chloroflexi" | Phylum == "Desulfobacterota" | Phylum == "Bacteroidota" | Phylum == "Unknown" | Phylum == "Latescibacterota" | Phylum == "Acidobacteriota" | Phylum == "Cyanobacteria" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Actinobacteriota" | Phylum == "Verrucomicrobiota" | Phylum == "Patescibacteria")
+#box plot
+xx = ggplot(chloro, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10", breaks = c(0.1, 0.25,0.5, 1,2,4,10)) + labs(y = "", x = "PhyloFlash abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
+
+####################
+##NMDS plot
+library(vegan)
+yy = tax_comb3 %>% select(Phylum, Sample, illumina, nano) %>% pivot_longer(!c(Phylum,Sample), names_to = "Tech", values_to = "Abundance")
+yy$Name = paste0(yy$Sample, "_", yy$Tech)
+yy2 = yy %>% pivot_wider(id_cols = Name, names_from = Phylum, values_from = Abundance)
+yym = as.matrix(yy2[,2:ncol(yy2)])
+set.seed(123)
+
+nmds = metaMDS(yym, distance = "bray")
+#Stress:     0.07466301 
+
+
 
 
 
