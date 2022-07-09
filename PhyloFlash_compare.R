@@ -18,3 +18,4 @@ tax_comb2 = tax_comb0 %>% pivot_longer(!Phylum, names_to = "Sample", values_to =
 tax_comb3[,3:5][is.na(tax_comb3[,3:5])] <- 0
 
 
+tax_comb4 = tax_comb3 %>% filter(Sample == "2A2.PurpleHaze.0.4" | Sample == "2A2.PurpleHaze.12.16" | Sample == "2A2.PurpleHaze.24.28" | Sample == "2AT.175NW.0.4" | Sample == "2AT.175NW.24.28" | Sample == "2B1.TinyBubbles.0.4" | Sample == "2B1.TinyBubbles.12.16" | Sample == "2B1.TinyBubbles.20.24" | Sample == "2B1.TinyBubbles.24.30" ) 
