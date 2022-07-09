@@ -138,16 +138,76 @@ xx = ggplot(chloro, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colo
 ####################
 ##NMDS plot
 library(vegan)
-yy = tax_comb3 %>% select(Phylum, Sample, illumina, nano) %>% pivot_longer(!c(Phylum,Sample), names_to = "Tech", values_to = "Abundance")
+yy = tax_comb3 %>% select(Phylum, Sample, illumina, nano, PF) %>% pivot_longer(!c(Phylum,Sample), names_to = "Tech", values_to = "Abundance")
 yy$Name = paste0(yy$Sample, "_", yy$Tech)
 yy2 = yy %>% pivot_wider(id_cols = Name, names_from = Phylum, values_from = Abundance)
 yym = as.matrix(yy2[,2:ncol(yy2)])
 set.seed(123)
 
 nmds = metaMDS(yym, distance = "bray")
-#Stress:     0.07466301 
+#Stress:     0.09439978
+
+data.scores = as.data.frame(scores(nmds)$sites)
+data.scores$Name = yy2$Name
+data.scores = data.scores %>% separate(Name, into = c("Sample", "Tech"), sep = "_")
+data.scores$Sample2 = data.scores$Sample
+data.scores = data.scores %>% separate(Sample2, into = c("Site", "Subsite", "Depth1", "Depth2"), sep = "\\.")
+
+#coloured by tech
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Tech), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778"))
+ 
+#coloured by site 
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Site), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C"))
+ 
+ #coloured by subsite 
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C"))
+  
+#subsite and depth
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite, size = as.numeric(Depth1))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
+  
 
 
+###Anosim and Mantel tests - no rarefaction
+ano = anosim(yym, data.scores$Tech, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: -0.007164 
+      #Significance: 0.4846
+
+ano = anosim(yym, data.scores$Site, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: 0.5923
+     # Significance: 1e-04 
+
+ano = anosim(yym, data.scores$Subsite, distance = "bray", permutations = 9999)
+#ANOSIM statistic R: 0.5923 
+#Significance: 1e-04 
+
+
+
+#Mantel tests
+dist.abund = vegdist(yym, method = "bray")
+dist.temp = dist(data.scores$Depth1, method = "euclidean")
+abund_temp = mantel(dist.abund, dist.temp, method = "spearman", permutations = 9999, na.rm = TRUE)
+
+#Mantel statistic r: 0.1831   
+     # Significance:  0.0053
+
+aa = as.vector(dist.abund)
+tt = as.vector(dist.temp)
+plot(aa,tt)
+at = data.frame(aa = aa, tt = tt)
+at2 = ggplot(at, aes(x = aa, y = tt)) + geom_point(alpha = 0.5) + theme_bw() + labs(x = "Bray Curtis Dissimilarity between samples", y = "Depth (cm) between samples") 
+
+########
+##Indicator Species 
+library(indicspecies)
+tax_comb6 = tax_comb3 %>% select(Phylum, Sample, illumina, nano, PF) %>% pivot_longer(cols = c(illumina, nano, PF), names_to = "tech", values_to = "Abundance")
+
+tax_comb6$Sample2 = paste0(tax_comb6$Sample,"_", tax_comb6$tech)
+tax_comb7 = tax_comb6 %>% pivot_wider(names_from = Phylum, id_cols= Sample2, values_from = Abundance)
+tax_comb8 = tax_comb7 %>% separate(Sample2, into = c("Sample", "Tech"), sep = "_")
+abund = tax_comb8[,3:ncol(tax_comb8)]
+tech = tax_comb8$Tech
+inv = multipatt(abund, tech, func = "r.g", control = how(nperm=9999))
+summary(inv)
 
 
 
