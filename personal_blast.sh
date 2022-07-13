@@ -94,3 +94,23 @@ blastn -query  MAG_16S_dsr_gene.fa -db Nanopore_DB -outfmt 6 -out blast_results_
 
 
 
+#########################
+##add sample name and Seq number to nanopore sequences
+
+conda activate bbtools 
+for i in *fastq; do sample=$(basename $i .fastq).fasta; reformat.sh in=$i out=$sample; done
+
+#add short seq names and sample names to Nanopore sequences
+for i in *fasta; do sample=$(basename $i _filt.fasta); awk '{for(x=1;x<=NF;x++)if($x~/>/){sub(/>/,">SEQ"++i" ")}}1' $i > numbers_$i; sed "s/>/>${sample}_/" numbers_$i > final_$i ; rm numbers_$i; done
+
+#concatenate
+cat final*.fasta > Nanopore_all_seqs_named.fasta
+
+#load blast
+conda activate blast
+
+#make a blast db of concatenated files 
+makeblastdb -in Nanopore_all_seqs_named.fasta -out Nanopore_DB -dbtype nucl
+
+
+
