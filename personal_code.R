@@ -21,9 +21,11 @@ library(tidyverse)
 #try concatenating nanopore files in R
 folders <- list.files(pattern = "barcode" )
 
+
+
 for (directory in folders) {
 print(directory) 
-files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq") 
+files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq.gz") 
 print(files)
 fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
     for (fl in files) {
@@ -40,14 +42,15 @@ path = getwd()
 
 #Forward and fastq filenames have format: 
 #barcode01_combined.fastq 
-fnFs = sort(list.files(path, pattern="_combined.fastq.gz", full.names = TRUE))
+fnFs = sort(list.files(path, pattern="_combined.fastq", full.names = TRUE))
 
 #Extract sample names, assuming filenames have format: #samplename_XXX.fastq.gz
 sample.names = sapply(strsplit(basename(fnFs), "\\."), `[`, 1)
 
+#need to get rid of "gz" because file is no longer zipped 
 
 #filter and trim reads- create new paths for new files 
-filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq.gz"))
+filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq"))
 names(filtFs) = sample.names
 
 
@@ -67,7 +70,7 @@ sub = sample(1:length(seqs), rarefaction_depth, replace=FALSE)
 seq2 = seqs[sub]
 tax_rc = assignTaxonomy(seq2, path_to_taxonomy_database, multithread=TRUE, tryRC = TRUE)
 base = basename(fastq)
-samples = gsub("_filt.fastq.gz", "", base)
+samples = gsub("_filt.fastq", "", base)
 write.csv(tax_rc, paste('tax', samples, 'csv', sep = '.' ))
 }
 
