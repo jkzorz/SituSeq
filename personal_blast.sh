@@ -81,10 +81,16 @@ blastn -query ../PhyloFlash/PhyloFlash_16S_seqs.fa -db Nanopore_DB -outfmt 6 -ou
 
 
 ###MAG 16S dsr gene blast
+
+#add bin name to headers
+for i in rrna_*.fa; do sample="$(basename $i .fa)"; sed "s/>/>${sample}_/" $i > headers/$i; done
+
+
 #concatenate files with dsr gene together 
 cat rrna_S9C2AT-175NW-E46-24-28.65941.fa rrna_concoct_2B1-PurplePatch-A54-8-12_115.fa rrna_bin_TinyBubbles_2430.137_sub.fa rrna_bin_2AT525NW_1216.96.fa rrna_bin_2AT350NW_2428.95_sub.fa rrna_bin_2AT350NW_1216.20.fa rrna_bin_2AT700NW_1216.59.fa rrna_concoct_2A1-TheHole-C54-24-28_174.fa rrna_concoct_2A1-TheHole-C54-12-16_63.fa rrna_bin_2AT700NW_2428.84.fa rrna_concoct_2AT-875NW-B95-12-16_21.fa rrna_bin_PurplePatch_48.59.fa rrna_bin_2AT875NW_1216.110.fa > MAG_16S_dsr_gene.fa
 
 
+blastn -query  MAG_16S_dsr_gene.fa -db Nanopore_DB -outfmt 6 -out blast_results_MAG_dsr_97.tbl -max_target_seqs 1000 -perc_identity 97
 
 
 
