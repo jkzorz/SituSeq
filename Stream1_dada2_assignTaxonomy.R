@@ -6,7 +6,7 @@
 
 ##########################################
 ##parameters to set before running
-rarefaction_depth = 1000 #for no rarefaction see Nanopore_no_rarefaction.R
+subsample_depth = 1000 #for no subsampling see Nanopore_no_rarefaction.R
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
 sample_number = 40
 path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy database to working directory)
@@ -65,11 +65,11 @@ write.csv(out, "Filtered_sequence_summary.csv")
 ##########################Stop here if just using the R code for filtering and trimming sequences, output from this point can also be used for Stream 2
 ########################################################################################################################################################
 
-#for loop for getting sequences and assigning taxonomy - with subsetting to rarefaction depth
+#for loop for getting sequences and assigning taxonomy - with subsetting to subsampling depth
 for (fastq in filtFs) {
 print(fastq)
 seqs = getSequences(fastq)
-sub = sample(1:length(seqs), rarefaction_depth, replace=FALSE) 
+sub = sample(1:length(seqs), subsample_depth, replace=FALSE) 
 seq2 = seqs[sub]
 tax_rc = assignTaxonomy(seq2, path_to_taxonomy_database, multithread=TRUE, tryRC = TRUE)
 base = basename(fastq)
