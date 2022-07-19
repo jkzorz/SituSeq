@@ -26,7 +26,6 @@ library(tidyverse)
 folders <- list.files(pattern = "barcode" )
 
 
-
 for (directory in folders) {
 print(directory) 
 files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq.gz") 
@@ -37,7 +36,6 @@ fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
         writeFastq(fq, fout, mode="a")
         }
 }
-
 
 
 
@@ -64,7 +62,8 @@ out = filterAndTrim(fnFs, filtFs, trimLeft = 100, trimRight = 100, maxLen = 1800
 head(out,12) 
 write.csv(out, "Filtered_sequence_summary.csv")
 
-
+##########################Stop here if just using the R code for filtering and trimming sequences, output from this point can also be used for Stream 2
+########################################################################################################################################################
 
 #for loop for getting sequences and assigning taxonomy - with subsetting to rarefaction depth
 for (fastq in filtFs) {
