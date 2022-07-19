@@ -11,8 +11,8 @@ Before running the workflows offline, the following programs need to be installe
 code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R
 
 ### Stream 2: Blast sequences against custom database
-1. Windows substem for linux (wsl)
-2. R, Rstudio, and packages *dada2* and *tidyverse*
+1. R, Rstudio, and packages *dada2* and *tidyverse*
+2. Windows substem for linux (wsl) (*if using a windows machine, if not skip*)
 3. blast
 
 code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh
