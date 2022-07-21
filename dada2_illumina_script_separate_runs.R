@@ -308,11 +308,20 @@ ggsave("Illumina_phylum_bar_plot.png", height = 6, width =8)
 
 
 #facet bar plot
+#select taxa in both illumina and nano top 10
+tax_df2 <- tax_df %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria")
+tax_df2_long = tax_df2 %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2_long$Sample = gsub("4.8", "04.08", tax_df2_long$Sample)
+tax_df2_long$Sample = gsub("8.12", "08.12", tax_df2_long$Sample)
+tax_df2_long$Sample = gsub("1.4", "0.4", tax_df2_long$Sample)
+#colours
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","#B07156","#EBDDAD")
+
 tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site","Core", "Subsite", "Depth1", "Depth2"), sep = "\\.")
 tax_df2_long2$Depth3 = paste0(tax_df2_long2$Depth1,"-", tax_df2_long2$Depth2)
 
 gg = ggplot(tax_df2_long2, aes(x = Depth3, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
 
-ggsave("Illumina_phylum_bar_plot_facet.png", height = 6, width =8.5)
+#ggsave("Illumina_phylum_bar_plot_facet.png", height = 6, width =8.5)
 
 
