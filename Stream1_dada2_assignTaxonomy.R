@@ -100,7 +100,7 @@ write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"))
 tax_df_long = tax_df %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
 
 #colour scheme 
-colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
+colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
 
 #remove "_combined" from sample name
 tax_df_long$Sample = gsub("_combined","",tax_df_long$Sample)
@@ -116,8 +116,7 @@ xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(get(taxonomic_level), desc(
  #select top 10 most abundant taxa, based on abundance in one sample
  tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
  
- colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(10)
-
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD")
  
  tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
 
