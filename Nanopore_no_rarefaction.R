@@ -8,7 +8,7 @@ sample_number = 40
 
 #######################
 #in R - load packages in this order to avoid masking issues
-setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass/Seaquences-no-rarefaction/")
 library(ShortRead)
 library(dada2)
 library(tidyverse)
@@ -89,7 +89,8 @@ write.csv(tax_df, "Phylum_summary.csv")
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
 #colour scheme - 12 colours for max 12 barcodes
-colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
+#colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
+colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#F5A614", "#F26419", "#645E9D", "#68AC5D", "#C1D7AE", "#EBDDAD"))(sample_number)
 
 #remove "_combined" from sample name
 tax_df_long$Sample = gsub("_combined","",tax_df_long$Sample)
@@ -99,7 +100,7 @@ tax_df_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df_long$Sample)
 xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7, angle = 90, vjust = 0.3, hjust =1), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours) + guides(colour = "none")
  xx
  #save bubble plot
- ggsave("bubble_plot_phyla.png", height = 6, width = 5.5)
+ ggsave("bubble_plot_phyla.png", height = 7, width = 6.5)
  
  #top phyla 
  tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
