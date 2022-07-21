@@ -92,7 +92,7 @@ gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Ph
  gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5, alpha = 0.8) + coord_equal()  + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 #ggsave("Seaquences-no-rarefaction/nano_illumina_16S_compare_sqrt_norare_newcolours_noline.png", height = 6, width = 6.5)
 
-#with line
+#with line and regression
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_smooth(method = "lm", colour = 'red') +  geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5, alpha = 0.8) + coord_equal()  + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 #ggsave("Seaquences-no-rarefaction/nano_illumina_16S_compare_sqrt_norare_newcolours.png", height = 6, width = 6.5)
 
@@ -121,39 +121,39 @@ xx = ggplot(tax_comb4, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, c
 
 
 #### just choose high abundance phyla
-chloro = tax_comb4 %>% filter(Phylum == "Campylobacterota" | Phylum == "Calditrichota" | Phylum == "Proteobacteria" | Phylum == "Caldatribacteriota" | Phylum == "Planctomycetota" | Phylum == "Chloroflexi" | Phylum == "Desulfobacterota" | Phylum == "Bacteroidota" | Phylum == "Unknown" | Phylum == "Latescibacterota" | Phylum == "Acidobacteriota" | Phylum == "Cyanobacteria" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Actinobacteriota" | Phylum == "Verrucomicrobiota" | Phylum == "Patescibacteria")
+chloro = tax_comb4 %>% filter(Phylum == "Campylobacterota" | Phylum == "Calditrichota" | Phylum == "Proteobacteria" |Phylum == "Dependentiae" | Phylum == "Caldatribacteriota" | Phylum == "Planctomycetota" | Phylum == "Chloroflexi" | Phylum == "Desulfobacterota" | Phylum == "Bacteroidota" | Phylum == "Unknown" | Phylum == "Latescibacterota" | Phylum == "Acidobacteriota" | Phylum == "Cyanobacteria" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Actinobacteriota" | Phylum == "Verrucomicrobiota" | Phylum == "Patescibacteria")
 
-xx = ggplot(chloro, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10", breaks = c(0.1, 0.25,0.5, 1,2,4,10)) + labs(y = "", x = "Illumina abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
-
+xx = ggplot(chloro, aes(x = Ratio, y = Phylum))+ geom_vline(xintercept = 1, colour = "red") + geom_boxplot(outlier.shape = NA, size = 0.35) + geom_point(alpha = 0.5, size = 0.75) + scale_x_continuous(trans = "log10", breaks = c(0.1, 0.25,0.5, 1,2,4,10)) + labs(y = "", x = "Illumina abundance:Nanopore abundance") + theme(axis.text.y = element_text(size = 7), panel.border = element_rect(fill = NA, colour = "grey80"), legend.key = element_blank(), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey99"))
+#ggsave("Illumina_nanopore_ratio_compare_norare_top_phyla.png", height = 6, width =5.5)
 
 #correlation - pearson - no rarefaction
  cor(tax_comb3$illumina, tax_comb3$nano)
-0.9081141
+#0.9081141
 
 #correlation - spearman - no rarefaction
 cor(tax_comb3$illumina, tax_comb3$nano, method = "spearman")
- 0.8869522
+# 0.8869522
 
 #no rarefaction
 s = lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 summary(s)
-Call:
-lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
+#Call:
+#lm(formula = tax_comb3$nano ~ tax_comb3$illumina)
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--21.254  -0.224  -0.224  -0.122  38.228 
+#Residuals:
+#    Min      1Q  Median      3Q     Max 
+#-21.254  -0.224  -0.224  -0.122  38.228 
 
-Coefficients:
-                   Estimate Std. Error t value Pr(>|t|)    
-(Intercept)        0.223766   0.043116    5.19 2.26e-07 ***
-tax_comb3$illumina 0.845601   0.007424  113.90  < 2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#Coefficients:
+ #                  Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)        0.223766   0.043116    5.19 2.26e-07 ***
+#tax_comb3$illumina 0.845601   0.007424  113.90  < 2e-16 ***
 
-Residual standard error: 2.193 on 2758 degrees of freedom
-Multiple R-squared:  0.8247,	Adjusted R-squared:  0.8246 
-F-statistic: 1.297e+04 on 1 and 2758 DF,  p-value: < 2.2e-16
+#Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 2.193 on 2758 degrees of freedom
+#Multiple R-squared:  0.8247,	Adjusted R-squared:  0.8246 
+#F-statistic: 1.297e+04 on 1 and 2758 DF,  p-value: < 2.2e-16
 
 
 
@@ -177,17 +177,20 @@ data.scores$Sample2 = data.scores$Sample
 data.scores = data.scores %>% separate(Sample2, into = c("Site", "Subsite", "Depth1", "Depth2"), sep = "\\.")
 
 #coloured by tech
-xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Tech), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778"))
- 
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Tech), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#86BBD8", "#BB3551"))
+#ggsave("Seaquences-no-rarefaction/NMDS_compare_Tech_norare.png", height = 5, width = 5.5)
+
 #coloured by site 
-xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Site), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C"))
- 
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Site), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#86BBD8", "#BB3551", "#F5A614", "#C1D7AE", "#F9DC5C"))
+#ggsave("Seaquences-no-rarefaction/NMDS_compare_Site_norare.png", height = 5, width = 5.5)
+
  #coloured by subsite 
-xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C"))
-  
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite), size = 3) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#86BBD8", "#BB3551", "#F5A614", "#C1D7AE", "#2F4858"))
+#ggsave("Seaquences-no-rarefaction/NMDS_compare_Subsite_norare.svg", height = 5, width = 5.5)
+
 #subsite and depth
-xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite, size = as.numeric(Depth1))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#ED254E", "#023778", "#A9E2A2", "#94A2B3", "#F9DC5C")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
-  
+xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite, size = as.numeric(Depth1))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#86BBD8", "#BB3551", "#F5A614", "#C1D7AE", "#2F4858")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
+#ggsave("Seaquences-no-rarefaction/NMDS_compare_Subsite_depth_norare.png", height = 5, width = 5.5)
   
  
  
