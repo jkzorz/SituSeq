@@ -235,3 +235,84 @@ write.csv(ASVseqtabtaxa, "seaquencing_ASVseq_taxa.csv")
 
 #saving workspace: 
 save.image(file = "seaquencig_dada2_taxonomy.RData")
+
+
+#################
+###Make Illumina phylum level summary
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass")
+#removed extra sample manually 
+asv = read.csv("../../Illumina_reads/run_separation/seaquencing_ASVseq_taxa_4analysis.csv")
+
+library(reshape2)
+library(tidyverse)
+
+asv = asv %>% filter(Kingdom == "Bacteria")
+
+
+abund = asv[,2:41]
+sums = colSums(abund)
+abund2 = t(t(abund)/sums*100)
+abund3 = data.frame(Phylum = asv$Phylum, abund2) 
+abund4 = abund3 %>% group_by(Phylum) %>% summarize_all(list(sum))
+abund4$Phylum[is.na(abund4$Phylum)] <- "Unknown"
+
+#for calculating average abundance of "Unknown" classifications
+y = abund4 %>% filter(Phylum == "Unknown") 
+mean(as.matrix(y[,2:ncol(y)]))
+sd(as.matrix(y[,2:ncol(y)]))
+
+tax_df = abund4
+colnames(tax_df) = gsub("JZO.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".Univ.20220222", "", colnames(tax_df))
+colnames(tax_df) = gsub("TSU.2021.Condor.", "", colnames(tax_df))
+colnames(tax_df) = gsub(".20211213", "", colnames(tax_df))
+
+colnames(tax_df)[2:ncol(tax_df)] = paste("illumina",  colnames(tax_df)[2:ncol(tax_df)], sep = "-")
+
+write.csv(tax_df, "../../Illumina_reads/run_separation/Illumina_Phylum_summary.csv")
+
+
+
+###Illumina phylum level bubble and bar plot
+setwd("~/University of Calgary/PostDoc/Atlantic Condor 2021/UofC_Analysis/Seaquencing/Illumina_reads/run_separation")
+tax_df = read.csv("Illumina_Phylum_summary.csv", header = TRUE)
+colnames(tax_df) = gsub("X", "", colnames(tax_df))
+
+tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+
+tax_df_long$Sample = gsub("4.8", "04.08", tax_df_long$Sample)
+tax_df_long$Sample = gsub("8.12", "08.12", tax_df_long$Sample)
+tax_df_long$Sample = gsub("1.4", "0.4", tax_df_long$Sample)
+
+#colours
+colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
+
+xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7, angle = 90, vjust = 0.3, hjust =1), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours) + guides(colour = "none")
+ggsave("Illumina_phylum_bubble_plot.png", height = 7, width = 7)
+
+#bar plot 
+tax_df = illum
+ tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
+ #select top 10 most abundant taxa, based on abundance in one sample
+ tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
+ 
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD")
+
+tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2_long$Sample = gsub("4.8", "04.08", tax_df2_long$Sample)
+tax_df2_long$Sample = gsub("8.12", "08.12", tax_df2_long$Sample)
+tax_df2_long$Sample = gsub("1.4", "0.4", tax_df2_long$Sample)
+
+gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
+ggsave("Illumina_phylum_bar_plot.png", height = 6, width =8)
+
+
+#facet bar plot
+tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site","Core", "Subsite", "Depth1", "Depth2"), sep = "\\.")
+tax_df2_long2$Depth3 = paste0(tax_df2_long2$Depth1,"-", tax_df2_long2$Depth2)
+
+gg = ggplot(tax_df2_long2, aes(x = Depth3, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
+
+ggsave("Illumina_phylum_bar_plot_facet.png", height = 6, width =8.5)
+
+
