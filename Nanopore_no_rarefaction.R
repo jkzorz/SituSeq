@@ -127,6 +127,6 @@ ggsave("bar_plot_top_phyla.png", height = 6, width = 5)
 
 tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site", "Subsite", "Depth"), sep = "_")
 
-gg = ggplot(tax_df2_long2, aes(x = Depth, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill ="grey99", colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
+gg = ggplot(tax_df2_long2, aes(x = Depth3, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
 
 ggsave("bar_plot_top_phyla_newcolours_facet.png", height = 6, width = 8.5)
