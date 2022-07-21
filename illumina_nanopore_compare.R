@@ -76,11 +76,10 @@ tax_comb2$Sample = gsub("51.Kilo.1.4", "51.Kilo.0.4", tax_comb2$Sample)
 
 tax_comb3 = tax_comb2 %>% pivot_wider(names_from = Tech, values_from = Abundance)
 tax_comb3[,3:4][is.na(tax_comb3[,3:4])] <- 0
-tax_comb3$Phylum2 = ifelse((tax_comb3$illumina+tax_comb3$nano) > 7, tax_comb3$Phylum, "other")
-
+tax_comb3$Phylum2 = ifelse(tax_comb3$Phylum == "Planctomycetota" | tax_comb3$Phylum == "Bacteroidota" | tax_comb3$Phylum == "Acidobacteriota" | tax_comb3$Phylum == "Caldatribacteriota"| tax_comb3$Phylum == "Campylobacterota"| tax_comb3$Phylum == "Chloroflexi"| tax_comb3$Phylum == "Desulfobacterota"| tax_comb3$Phylum == "Latescibacterota"| tax_comb3$Phylum == "Methylomirabilota"| tax_comb3$Phylum == "NB1-j"| tax_comb3$Phylum == "Patescibacteria" | tax_comb3$Phylum == "Proteobacteria" | tax_comb3$Phylum == "Unknown", tax_comb3$Phylum, "Other")
 
 #colour palette
-colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'lightblue', 'navy', 'purple', 'pink', 'grey', 'black'))(20)
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "grey90", "#EBDDAD", "black","#B07156", "grey40")
 
 #scatter plot comparison 
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(0,85)) + scale_x_continuous(limits = c(0,85)) + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
@@ -89,9 +88,13 @@ gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Ph
 #scatter plot comparison log scale 
 gg = ggplot(tax_comb3, aes(x = illumina, y = nano)) + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm") + scale_y_continuous(limits = c(NA,85), trans = "log10") + scale_x_continuous(limits = c(NA,85), trans = "log10") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
 
-#scatter plot comparison sqrt scale - with 1:1 line
-gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5) + coord_equal() + geom_smooth(method = "lm", colour = 'red') + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+#scatter plot comparison sqrt scale - with 1:1 line - no regression
+ gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5, alpha = 0.8) + coord_equal()  + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+#ggsave("Seaquences-no-rarefaction/nano_illumina_16S_compare_sqrt_norare_newcolours_noline.png", height = 6, width = 6.5)
 
+#with line
+gg = ggplot(tax_comb3, aes(x = illumina, y = nano))+ geom_smooth(method = "lm", colour = 'red') +  geom_abline(intercept = 0, slope = 1, colour = "grey30", linetype="dashed") + geom_point(aes(colour = Phylum2),size = 2.5, alpha = 0.8) + coord_equal()  + scale_y_continuous(limits = c(NA,85), trans = "sqrt") + scale_x_continuous(limits = c(NA,85), trans = "sqrt") + labs(x = "Illumina abundance (%)", y = "Nanopore abundance (%)", colour = "Phylum") + scale_colour_manual(values = colours)+theme(legend.key = element_blank(), legend.title = element_text(size = 10), legend.key.height = unit(0.1, 'cm'), panel.border = element_rect(fill = NA, colour = "grey80"),  panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + guides(colour=guide_legend(ncol=1))
+#ggsave("Seaquences-no-rarefaction/nano_illumina_16S_compare_sqrt_norare_newcolours.png", height = 6, width = 6.5)
 
 #summarize by phylum - create ratio column
 tax_comb3$Ratio = tax_comb3$illumina/tax_comb3$nano
