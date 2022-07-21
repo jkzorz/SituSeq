@@ -90,7 +90,8 @@ tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = 
 
 #colour scheme - 12 colours for max 12 barcodes
 #colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(sample_number)
-colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#F5A614", "#F26419", "#645E9D", "#68AC5D", "#C1D7AE", "#EBDDAD"))(sample_number)
+colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
+
 
 #remove "_combined" from sample name
 tax_df_long$Sample = gsub("_combined","",tax_df_long$Sample)
@@ -107,8 +108,7 @@ xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + g
  #select top 10 most abundant taxa, based on abundance in one sample
  tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
  
- colours = colorRampPalette(c('brown', 'red',"orange", 'gold',  'forestgreen', 'turquoise', 'dodgerblue', 'navy', 'purple', 'pink',  'black'))(10)
-
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD")
  
  tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
@@ -116,11 +116,17 @@ tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df2_long$Sample)
 
 #bar plot of most abundant phyla
-gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum), colour = "white", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
+gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
 gg
 #save plot
 ggsave("bar_plot_top_phyla.png", height = 6, width = 5)
 
 
+################################################
+###facet plot
 
+tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site", "Subsite", "Depth"), sep = "_")
 
+gg = ggplot(tax_df2_long2, aes(x = Depth, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill ="grey99", colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
+
+ggsave("bar_plot_top_phyla_newcolours_facet.png", height = 6, width = 8.5)
