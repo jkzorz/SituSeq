@@ -210,5 +210,17 @@ inv = multipatt(abund, tech, func = "r.g", control = how(nperm=9999))
 summary(inv)
 
 
+#comparison bar plots
+#select different phyla
+tax_comb9 = tax_comb8 %>% select(Sample, Tech, Dependentiae, Campylobacterota, Firmicutes, Patescibacteria ,Actinobacteriota,Poribacteria,Calditrichota,Chloroflexi,Unknown, Verrucomicrobiota)
+tax_comb10 = tax_comb9 %>% pivot_longer(!c(Sample, Tech), names_to = "Phylum", values_to = "Abundance") 
+
+ tax_comb10$Sample = gsub("2A2.", "", tax_comb10$Sample  )
+tax_comb10$Sample = gsub("2AT.", "", tax_comb10$Sample  )
+tax_comb10$Sample = gsub("2B1.", "", tax_comb10$Sample  )
+
+#facet bar plot
+xx = ggplot(tax_comb10, aes(x = Sample, y = Abundance)) + facet_grid(Phylum ~., scales = "free") + geom_bar(aes(fill = Tech), width = 0.65, stat = "identity", position = "dodge") + theme(panel.background = element_blank(),panel.border = element_rect(fill = NA, colour = "black"), strip.background = element_rect(fill = "grey90", colour = "black"), strip.text.y = element_text(angle = 0), axis.text.x = element_text(angle = 90, hjust =1, vjust = 0.4, size = 8, colour = "black"),legend.position = "top", axis.text.y = element_text(colour = "black", size = 7)) + labs(x = "", fill = "", y = "Relative abundance (%)") + scale_fill_manual(values = c("#86BBD8", "#BB3551", "#F5A614"))
+#ggsave("Phyla_compare_bar_facet.png", height = 7, width = 6)
 
 
