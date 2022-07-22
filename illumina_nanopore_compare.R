@@ -190,7 +190,7 @@ xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Su
 
 #subsite and depth
 xx = ggplot(data.scores, aes(x = NMDS1, y = NMDS2)) + geom_point(aes(colour = Subsite, size = as.numeric(Depth1))) + theme(panel.background = element_blank(), panel.border = element_rect(fill = NA, colour = "grey20"), legend.key = element_blank()) + scale_colour_manual(values = c("#86BBD8", "#BB3551", "#F5A614", "#C1D7AE", "#2F4858")) + scale_radius(range = c(1,6)) + labs(size = "Depth (cm)")
-#ggsave("Seaquences-no-rarefaction/NMDS_compare_Subsite_depth_norare.png", height = 5, width = 5.5)
+#ggsave("Seaquences-no-rarefaction/NMDS_compare_Subsite_depth_norare.png", height = 5, width = 6)
   
  
  
