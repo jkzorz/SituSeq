@@ -114,3 +114,16 @@ makeblastdb -in Nanopore_all_seqs_named.fasta -out Nanopore_DB -dbtype nucl
 
 
 
+###############################
+###personal blast on windows subsystem for linux
+
+#move to c drive folder "blast"
+cd /mnt/c/Users/jacqu/Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/Blast/
+
+#make blast database
+makeblastdb -in Gas_associated_25_ASVs_no_arch.txt -out Gas_associated_AC_DB -dbtype nucl
+
+#run blast 
+blastn -query Nanopore_all_seqs_named.fasta -db Gas_associated_AC_DB -outfmt 6 -out blast_gas_associated_results_97_1000seqs.tbl -max_target_seqs 1000 -perc_identity 97
+
+
