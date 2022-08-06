@@ -101,7 +101,7 @@ tax_df_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df_long$Sample)
 xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7, angle = 90, vjust = 0.3, hjust =1), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "") + scale_colour_manual(values = colours) + guides(colour = "none")
  xx
  #save bubble plot
- ggsave("bubble_plot_phyla.png", height = 7, width = 6.5)
+ #ggsave("bubble_plot_phyla.png", height = 7, width = 6.5)
  
  #top phyla 
  tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
@@ -119,14 +119,14 @@ tax_df2_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df2_long$Sample)
 gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
 gg
 #save plot
-ggsave("bar_plot_top_phyla.png", height = 6, width = 5)
+#ggsave("bar_plot_top_phyla.png", height = 6, width = 5)
 
 
 ################################################
 ###facet plot
 tax_df2 <- tax_df %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria")
 colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","#B07156","#EBDDAD")
- tax_df2_long = tax_df2  %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+ tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
 tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df2_long$Sample)
