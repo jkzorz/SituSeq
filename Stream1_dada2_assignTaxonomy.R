@@ -8,7 +8,7 @@
 ##parameters to set before running
 subsample_depth = 1000 #for no subsampling see Nanopore_no_rarefaction.R
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
-sample_number = 40
+sample_number = 12
 path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy database to working directory)
 path_to_working_directory = "."
 
