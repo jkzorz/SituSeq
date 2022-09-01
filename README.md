@@ -39,6 +39,8 @@ BiocManager::install("dada2", version = "3.14")
 
 ```
 
+Download Silva taxonomy database (or other preferred database) for use in Stream1: https://zenodo.org/record/4587955#.YfxAfOrMI2w
+
 ## Stream 2: Install windows subsystem for linux
 Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell by entering ```wsl```
  
