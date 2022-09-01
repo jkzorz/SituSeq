@@ -5,12 +5,14 @@
 Before running the workflows offline, the following programs need to be installed. Note that R is required for both stream 1 and stream 2 analyses. 
 
 ### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
+**Downloads**
 1. R, Rstudio, and packages *dada2*, *tidyverse*, and *ShortRead* 
 2. Taxonomy database(s) (e.g. *Silva*: https://zenodo.org/record/4587955#.YfxAfOrMI2w )
 
 code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R
 
 ### Stream 2: Blast sequences against custom database
+**Downloads**
 1. R, Rstudio, and packages *dada2* and *tidyverse*
 2. Windows substem for linux (wsl) (*if using a windows machine, if not skip*)
 3. blast
