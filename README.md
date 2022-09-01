@@ -27,6 +27,11 @@ Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/prod
 #install tidyverse
 install.packages("tidyverse")
 
+#install ShortRead
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ShortRead")
+
 #install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
 if (!requireNamespace("BiocManager", quietly = TRUE))
 install.packages("BiocManager")
