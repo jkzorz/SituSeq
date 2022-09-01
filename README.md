@@ -39,7 +39,7 @@ BiocManager::install("dada2", version = "3.14")
 
 ```
 
-**Download Silva taxonomy database** (or other preferred database) for use in Stream1: https://zenodo.org/record/4587955#.YfxAfOrMI2w
+**Download Silva taxonomy database** (or other preferred database) for use in Stream1: https://zenodo.org/record/4587955#.YfxAfOrMI2w.
 Select "silva_nr99_v138.1_train_set.fa.gz" or "silva_nr99_v138.1_wSpecies_train_set.fa.gz" to download
 
 ## Stream 2: Install windows subsystem for linux
