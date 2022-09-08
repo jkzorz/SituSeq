@@ -1,5 +1,5 @@
 # SituSeq
-*SituSeq* is a workflow for the analysis of Nanopore-generated 16S rRNA amplicon data. The main workflow only requires R, and can be conducted entirely offline. It was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
+*SituSeq* is a workflow for the analysis of Nanopore-generated 16S rRNA amplicon data. The main workflow (Stream1) only requires R, and can be conducted entirely offline. It was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
 
 # Installation 
 Before running the workflows offline, the following programs need to be installed. Note that R is required for both stream 1 and stream 2 analyses. 
