@@ -1,10 +1,10 @@
 ###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
+#This code is meant to work on the combined, filtered and trimmed sequences generated from the first part of Stream 1. 
+#If using Stream 1, they should be found in the directory "filtered" 
 
 
 #open your command line program (e.g. wsl in windows, Terminal on a mac, or command prompt on a linux system) 
 
-
-#Combine and concatenate Nanopore 16S rRNA sequences. Best to start from filter and trimmed sequences (Stream1).
 #move into directory containing filter and trimmed sequences from the first part of Stream 1 e.g. cd filtered
 #convert all fastq files to fasta files
 for i in *.fastq; do sed -n '1~4s/^@/>/p;2~4p' $i > $(basename $i fastq)fasta; done
