@@ -5,7 +5,7 @@
 
 
 #Combine and concatenate Nanopore 16S rRNA sequences. Best to start from filter and trimmed sequences (Stream1).
-#move into directory containing filter and trimmed sequences e.g. cd filtered
+#move into directory containing filter and trimmed sequences from the first part of Stream 1 e.g. cd filtered
 #convert all fastq files to fasta files
 for i in *.fastq; do sed -n '1~4s/^@/>/p;2~4p' $i > $(basename $i fastq)fasta; done
 
