@@ -1,3 +1,10 @@
+###location of test files on windows computer from wsl login
+#cd ../../Documents\ and\ Settings/jacqu/Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass/SituSeq_test/
+
+
+
+
+
 #code for blast comparison of Nanopore 16S and Illumina 16S
 
 #concatenate all fastq.gz files 
