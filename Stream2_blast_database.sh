@@ -3,7 +3,7 @@
 #If using Stream 1, they should be found in the directory "filtered" 
 
 
-#open your command line program (e.g. wsl in windows, Terminal on a mac, or command prompt on a linux system) 
+#open your command line program (e.g. wsl in windows, Terminal on a mac or a linux system) 
 
 #move into directory containing filter and trimmed sequences from the first part of Stream 1 e.g. cd filtered
 #convert all fastq files to fasta files
