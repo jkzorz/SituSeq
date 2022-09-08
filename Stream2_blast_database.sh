@@ -3,8 +3,6 @@
 #Start with a fasta file of sequences of interest: e.g. seqs.fasta
 #open your command line program (e.g. wsl in windows, Terminal on a mac, or command prompt on a linux system) 
 
-#cd ../../Documents\ and\ Settings/jacqu/Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/16S_Nanopore/Seaquencing_all_fastq_pass/SituSeq_test/
-
 
 #Combine and concatenate Nanopore 16S rRNA sequences. Best to start from filter and trimmed sequences (Stream1).
 #move into directory containing filter and trimmed sequences e.g. cd filtered
