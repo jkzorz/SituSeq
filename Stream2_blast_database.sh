@@ -1,6 +1,6 @@
 ###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
 #This code is meant to work on the combined, filtered and trimmed sequences generated from the first part of Stream 1. 
-#If using Stream 1, they should be found in the directory "filtered" 
+#If using Stream 1, the filtered and trimmed sequences should be found in the directory "filtered" 
 
 
 #open your command line program (e.g. wsl in windows, Terminal on a mac or a linux system) 
