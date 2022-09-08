@@ -1,6 +1,6 @@
 ###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
 
-#Start with a fasta file of sequences of interest: e.g. seqs.fasta
+
 #open your command line program (e.g. wsl in windows, Terminal on a mac, or command prompt on a linux system) 
 
 
@@ -15,6 +15,7 @@ for i in *.fasta; do name="$(basename $i _combined_filt.fasta)"; sed "s/>/>${nam
 #concatenate all Nanopore fasta files with changed headers together
 cat header_* > NanoporeSeqs.fasta
 
+#Now you need a fasta file containing the sequences of interest: e.g. seqs.fasta
 #move into the directory containing your seqs.fasta file with the cd command 
 #make a Blast database out of the fasta sequences found in seqs.fasta (change name accordingly) 
 
