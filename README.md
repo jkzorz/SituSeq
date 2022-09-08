@@ -15,13 +15,13 @@ code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assi
 **Downloads**
 1. R, Rstudio, and packages *dada2* and *tidyverse*
 2. Windows substem for linux (wsl) (*if using a windows machine, if not skip*)
-3. blast
+3. Blast
 
 code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh
 
 ## Stream 1 and 2: Install R, R-Studio, and packages
 
-Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/products/rstudio/download/#download) and load *dada2* and *tidyverse* packages
+Install R (https://cran.rstudio.com/) and R-Studio (https://www.rstudio.com/products/rstudio/download/#download) and load *dada2*, *ShortRead*, and *tidyverse* packages
 
 ```
 #install tidyverse
@@ -44,7 +44,7 @@ Select "silva_nr99_v138.1_train_set.fa.gz" or "silva_nr99_v138.1_wSpecies_train_
 
 ## Stream 2: Install windows subsystem for linux
 Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell by entering ```wsl```
- 
+If not using a Windows system, skip this step.  
 
 ## Stream 2: Install local Blast (for windows) 
 
