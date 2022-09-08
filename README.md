@@ -42,6 +42,9 @@ BiocManager::install("dada2", version = "3.14")
 **Download Silva taxonomy database** (or other preferred database) for use in Stream1: https://zenodo.org/record/4587955#.YfxAfOrMI2w.
 Select "silva_nr99_v138.1_train_set.fa.gz" or "silva_nr99_v138.1_wSpecies_train_set.fa.gz" to download
 
+**Now you can run the code for Stream 1:** 
+https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R
+
 ## Stream 2: Install windows subsystem for linux
 Install windows subsystem for linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install) and open from windows power shell by entering ```wsl```
 If not using a Windows system, skip this step.  
@@ -52,3 +55,6 @@ Follow this link and select the *win64.exe* option for download:
 https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
 
 Once downloaded, run the application to finish the installation.
+
+**Now you can run the code for Stream 2:** 
+code is here: https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh
