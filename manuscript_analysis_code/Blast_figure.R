@@ -37,3 +37,13 @@ gg = ggplot(blast_sum3, aes(y = Depth, x = rel_abund))+ facet_grid(.~Subsite) + 
 #ggsave("Blast_hits_per_sample_percent.png", height = 6, width = 6)
 #ggsave("Blast_hits_per_sample_percent.svg", height = 6, width = 6)
 
+
+
+#blast stats
+#need to use full_join to keep samples without hits
+blast_sum2 = full_join(blast_sum, filt2, "V1")
+blast_sum3[is.na(blast_sum3)] <- 0
+blast_sum4 = blast_sum3 %>% group_by(Subsite) %>% summarize(site_average = mean(rel_abund), site_max = max(rel_abund), site_min = min(rel_abund), site_n = sum(n))
+
+
+
