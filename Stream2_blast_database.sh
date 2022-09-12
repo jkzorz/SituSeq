@@ -142,6 +142,6 @@ blast_sum_seqs2$rel_abund = (blast_sum_seqs2$n/blast_sum_seqs2$num_seqs)*100
 gg
 
 #save image
-ggsave("Blast_hits_per_sample_and sequence_percent.png", height = 8, width = 7)
+ggsave("Blast_hits_per_sample_and_sequence_percent.png", height = 8, width = 7)
 
 
