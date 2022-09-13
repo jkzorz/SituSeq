@@ -291,7 +291,7 @@ xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(Phylum, desc(Phylum)))) + g
 ggsave("Illumina_phylum_bubble_plot.png", height = 7, width = 7)
 
 #bar plot 
-tax_df = illum
+#tax_df = illum
  tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
  #select top 10 most abundant taxa, based on abundance in one sample
  tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
@@ -309,13 +309,17 @@ ggsave("Illumina_phylum_bar_plot.png", height = 6, width =8)
 
 #facet bar plot
 #select taxa in both illumina and nano top 10
-tax_df2 <- tax_df %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria")
-tax_df2_long = tax_df2 %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2 <- tax_df %>% select(-max) %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria" | Phylum == "Unknown")
+#add other row to df
+oth = c("Other", 100 -colSums(tax_df2[,2:ncol(tax_df2)]))
+test = rbind(tax_df2, oth)
+tax_df2_long = test %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2_long$Abundance = as.numeric(tax_df2_long$Abundance)
 tax_df2_long$Sample = gsub("4.8", "04.08", tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("8.12", "08.12", tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("1.4", "0.4", tax_df2_long$Sample)
 #colours
-colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","#B07156","#EBDDAD")
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","grey80","#B07156","#EBDDAD",  "grey40")
 
 tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site","Core", "Subsite", "Depth1", "Depth2"), sep = "\\.")
 tax_df2_long2$Depth3 = paste0(tax_df2_long2$Depth1,"-", tax_df2_long2$Depth2)
