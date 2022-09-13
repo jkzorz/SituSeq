@@ -85,6 +85,9 @@ tax_df = temp_list %>% reduce(full_join, by='Phylum')
 #write phylum summary csv
 write.csv(tax_df, "Phylum_summary.csv")
 
+#read phylum summary csv
+tax_df = read.csv("Phylum_summary.csv", header = TRUE)
+
 #long format
 tax_df_long = tax_df %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
 
@@ -124,14 +127,32 @@ gg
 
 ################################################
 ###facet plot
-tax_df2 <- tax_df %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria")
-colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","#B07156","#EBDDAD")
- tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2 <- tax_df %>% filter(Phylum == "Acidobacteriota" | Phylum == "Bacteroidota" | Phylum == "Caldatribacteriota" | Phylum == "Campylobacterota" | Phylum == "Chloroflexi" | Phylum == "Cyanobacteria" | Phylum == "Desulfobacterota" | Phylum == "Latescibacterota" | Phylum == "Methylomirabilota" | Phylum == "NB1-j" | Phylum == "Planctomycetota" | Phylum == "Proteobacteria"| Phylum == "Unknown")
+colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#31493C","grey80","#B07156","#EBDDAD",  "grey40")
 
+#get rid of NAs
+tax_df2[is.na(tax_df2)] <- 0
+
+#add other row to df
+oth = c("Other", 100 -colSums(tax_df2[,2:ncol(tax_df2)]))
+test = rbind(tax_df2, oth) 
+tax_df2_long = test %>% select(-max) %>% pivot_longer(!Phylum, names_to = "Sample", values_to = "Abundance")
+tax_df2_long$Abundance = as.numeric(tax_df2_long$Abundance)
 tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 tax_df2_long$Sample = gsub("barcode[0-9][0-9]_","",tax_df2_long$Sample)
 
-tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site", "Subsite", "Depth"), sep = "_")
 
+tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site", "Subsite", "Depth"), sep = "_")
+tax_df2_long2$Subsite = gsub("Transect", "", tax_df2_long2$Subsite)
+
+#vertical bars
 gg = ggplot(tax_df2_long2, aes(x = Depth, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
 #ggsave("bar_plot_top_phyla_newcolours_facet.png", height = 6, width = 8.5)
+
+#horizontal bars
+gg = ggplot(tax_df2_long2, aes(y = Depth, x = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(y = "", x = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.text.y = element_text(angle = 0), strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(colour = "black"), legend.key = element_blank()) + scale_x_continuous(limits = c(0,100.1), expand = c(0,0)) + facet_grid(Subsite~., scales = "free", space = "free") + scale_y_discrete(limits=rev) 
+#ggsave("bar_plot_top_phyla_newcolours_facet_nano_vertical.png",  height = 5.5, width =7)
+
+
+
+
