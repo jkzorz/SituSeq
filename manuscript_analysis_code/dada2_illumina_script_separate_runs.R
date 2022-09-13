@@ -323,9 +323,16 @@ colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#
 
 tax_df2_long2 = tax_df2_long %>% separate(Sample, into = c("Site","Core", "Subsite", "Depth1", "Depth2"), sep = "\\.")
 tax_df2_long2$Depth3 = paste0(tax_df2_long2$Depth1,"-", tax_df2_long2$Depth2)
+tax_df2_long2$Subsite = gsub("Transect", "", tax_df2_long2$Subsite)
 
+#vertical bars
 gg = ggplot(tax_df2_long2, aes(x = Depth3, y = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0)) + facet_grid(.~Subsite, scales = "free", space = "free")
 
+#horizontal bars
+gg = ggplot(tax_df2_long2, aes(y = Depth3, x = Abundance)) + geom_bar(aes(fill = Phylum),  position = "stack", stat = "identity", colour = "white", size = 0.1) + scale_fill_manual(values = colours) + labs(y = "", x = "Relative Abundance (%)") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"),strip.text.y = element_text(angle = 0), strip.background = element_rect(fill = "grey90", colour = "black"), axis.text.x = element_text(colour = "black"), legend.key = element_blank()) + scale_x_continuous(limits = c(0,100.1), expand = c(0,0)) + facet_grid(Subsite~., scales = "free", space = "free") + scale_y_discrete(limits=rev) 
+
+
 #ggsave("Illumina_phylum_bar_plot_facet.png", height = 6, width =8.5)
+#ggsave("Illumina_phylum_bar_plot_facet_vertical.png", height = 5.5, width =7)
 
 
