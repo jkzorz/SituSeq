@@ -6,7 +6,7 @@
 
 ##########################################
 ##parameters to set before running
-subsample_depth = 1000 #each sample will be randomly subsampled to this number of reads. Implemented after filterAndTrim command. For no subsampling see Nanopore_no_rarefaction.R
+subsample_depth = 1000 #each sample will be randomly subsampled to this number of reads, prior to taxonomic assignment (after filtering and trimming). For no subsampling see Nanopore_no_rarefaction.R
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
 sample_number = 12
 path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy database to working directory)
