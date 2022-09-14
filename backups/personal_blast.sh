@@ -134,3 +134,14 @@ makeblastdb -in Gas_associated_25_ASVs_no_arch.txt -out Gas_associated_AC_DB -db
 blastn -query Nanopore_all_seqs_named.fasta -db Gas_associated_AC_DB -outfmt 6 -out blast_gas_associated_results_97_1000seqs.tbl -max_target_seqs 1000 -perc_identity 97
 
 
+###Illumina ASV seqs 
+
+##move to c drive folder "blast"
+cd /mnt/c/Users/jacqu/Documents/University\ of\ Calgary/PostDoc/Atlantic\ Condor\ 2021/UofC_Analysis/Seaquencing/Blast/
+
+#run blast 
+blastn -query ASVseqs.fasta -db Gas_associated_AC_DB -outfmt 6 -out blastASV_gas_associated_results_97_1000seqs.tbl -max_target_seqs 1000 -perc_identity 97
+
+
+
+
