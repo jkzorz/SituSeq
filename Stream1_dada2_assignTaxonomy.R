@@ -67,10 +67,10 @@ tax_df = temp_list %>% reduce(full_join, by=taxonomic_level)
 #write summary csv of taxonomic level 
 write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"))
 
-#long format
+#convert data to long format
 tax_df_long = tax_df %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
 
-#colour scheme 
+#colour scheme for bubble plot
 colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
 
 #remove "_combined" from sample name
@@ -83,16 +83,17 @@ xx
 #save bubble plot
 ggsave(paste0("bubble_plot_",taxonomic_level,".png"), height = 6, width = 5.5)
 
-#top phyla 
+#select top 10 most abundant taxa, based on maximum abundance in data set
 tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
-
-#select top 10 most abundant taxa, based on abundance in one sample
 tax_df2 <- tax_df[order(-tax_df$max),][1:10,]
  
+#colour scheme for bar plot
 colours = c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD")
- 
+
+#convert data to long format
 tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
 
+#remove "_combined" from sample name
 tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 
 #bar plot of most abundant phyla
