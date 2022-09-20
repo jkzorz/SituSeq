@@ -5,7 +5,7 @@
 
 
 ######
-##parameters to set before running
+#parameters to set before running:
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
 #parameters for the filterAndTrim command:
 minLength = 1200 #Removes reads shorter than this length. Minimum length is enforced AFTER trimming
@@ -14,17 +14,17 @@ trimLeft = 100 #The number of nucleotides to remove from the start of each read.
 trimRight = 100 #The number of nucleotides to remove from the end of each read. Must cover the primer length
 
 ######
-
-#in R - load packages in this order to avoid masking issues
+#in R
+#set working directory
 setwd(path_to_working_directory)
+
+#load packages (in this order to avoid masking issues)
 library(ShortRead)
 library(dada2)
 library(tidyverse)
 
-
 #Concatenate nanopore files in R
 folders <- list.files(pattern = "barcode" )
-
 
 for (directory in folders) {
 print(directory) 
@@ -38,7 +38,6 @@ fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
 }
 
 
-
 #save path to object
 path = getwd()
 
@@ -48,15 +47,14 @@ fnFs = sort(list.files(path, pattern="_combined.fastq", full.names = TRUE))
 
 #Extract sample names, assuming filenames have format: #samplename_XXX.fastq
 sample.names = sapply(strsplit(basename(fnFs), "\\."), `[`, 1)
- 
 
 #filter and trim reads- create new paths for new files 
 filtFs <- file.path(path, "filtered", paste0(sample.names, "_filt.fastq"))
 names(filtFs) = sample.names
 
-
-#filter and trim command - 1200 and 1800?
+#filter and trim command - will create new fastq files with filtered and trimmed sequences
 out = filterAndTrim(fnFs, filtFs, trimLeft = trimLeft, trimRight = trimRight, maxLen = maxLength, minLen = minLength,  truncQ = 0, compress = FALSE)
-#see how many reads were lost
+
+#see how many reads were lost and write to csv file
 head(out,12) 
 write.csv(out, "Filtered_sequence_summary.csv")
