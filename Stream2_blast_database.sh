@@ -1,6 +1,6 @@
 ###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
-#This code is meant to work on the combined, filtered and trimmed sequences generated from the first part of Stream 1. 
-#If using Stream 1, the filtered and trimmed sequences should be found in the directory "filtered" 
+#This code is meant to work on the combined, filtered and trimmed sequences generated from the Preproccessing.R code. 
+#The filtered and trimmed sequences should be found in the directory "filtered" 
 #The end result of this code is a figure with the number of hits or percent abundance of the sequences of interest per sample 
 #There is an option for absolute number of hits or percent abundance using the number of reads per sample
 #There is also an option to sum the hits of all the sequences of interest, or to show the abundance of each sequence separately in each sample
@@ -8,7 +8,7 @@
 
 #open your command line program (e.g. wsl in windows, Terminal on a mac or a linux system) 
 
-#move into directory containing filtered and trimmed sequences from the first part of Stream 1 e.g. cd filtered
+#move into directory containing filtered and trimmed sequences from the Preprocessing.R script e.g. cd filtered
 #convert all fastq files to fasta files
 for i in *.fastq; do sed -n '1~4s/^@/>/p;2~4p' $i > $(basename $i fastq)fasta; done
 
@@ -20,11 +20,11 @@ cat header_* > NanoporeSeqs.fasta
 
 #Now you need a fasta file containing the sequences of interest: e.g. seqs.fasta
 #move into the directory containing your seqs.fasta file with the cd command 
-#make a Blast database out of the fasta sequences found in seqs.fasta (change names accordingly) 
+#make a BLAST database out of the fasta sequences found in seqs.fasta (change names accordingly) 
 
 makeblastdb -in seqs.fasta -out seqs_DB -dbtype nucl
 
-#run blast of Nanopore 16S rRNA sequences against the custom database. The cutoff here is 97% identity, but can be changed 
+#run BLAST of Nanopore 16S rRNA sequences against the custom database. The cutoff here is 97% identity, but can be changed 
 #note that 1 max_target_seqs is not recommended when the user is interested in the "best" hit 
 #as the blast algorithm only reports the first hit that matches the requirements, which may or may not be the "best" hit.
 #For this analysis, we are interested in counting the number of hits above 97% to our sequences of interest per sample, 
@@ -33,9 +33,9 @@ makeblastdb -in seqs.fasta -out seqs_DB -dbtype nucl
 
 blastn -query filtered/NanoporeSeqs.fasta -db seqs_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1 -perc_identity 97
 
-################################################################################################################################################
-### The rest of the analysis will be done in R
-################################################################################################################################################
+######
+#The rest of the analysis will be done in R
+######
 #This first section is the analysis without normalizing for number of sequences per sample 
 #The following section normalizes for number of sequences per sample. Skip to the following section if you would rather calculate relative abundance of hits
 #than absolute number of hits
