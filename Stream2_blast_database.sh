@@ -62,6 +62,7 @@ blast_sum = blast_hq %>% group_by(V1) %>% summarize(n = n())
 #colour scheme, change according to number of samples and desired colours
 colours = c("#2F4858","#68AC5D", "#830689", "#C1D7AE",   "#86BBD8",  "#F5A614","#33658A",  "#BB3551",  "#F26419",  "#EBDDAD")
 
+#bar plot
 gg = ggplot(blast_sum, aes(y = V1, x = n)) + geom_bar(stat = "identity", aes(fill = V1), colour = "black") + labs(y = "", x = "Number of hits to sequences of interest", fill = "") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text( colour = "black"), axis.text.y = element_text(colour = "black"), legend.position = "none") + scale_x_continuous(expand = c(0,0), limits = c(0, max(blast_sum$n + max(blast_sum$n/10)))) + scale_fill_manual(values = colours)
 gg
 
@@ -138,7 +139,7 @@ blast_sum_seqs2 = left_join(blast_sum_seqs, filt2, "V1")
 blast_sum_seqs2$rel_abund = (blast_sum_seqs2$n/blast_sum_seqs2$num_seqs)*100
 
 #plot as a bar plot
- gg = ggplot(blast_sum_seqs2, aes(y = V2, x = rel_abund))+ facet_grid(.~V1) + geom_bar(stat = "identity", aes(fill = V1), colour = "black") + labs(y = "", x = "Relative abundance (%)", fill = "") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text( colour = "black"), strip.background = element_rect(colour ="black"), axis.text.y = element_text(colour = "black"), legend.position = "none") + scale_x_continuous(expand = c(0,0), limits = c(0, max(blast_sum_seqs2$rel_abund + max(blast_sum_seqs2$rel_abund/10)))) + scale_fill_manual(values = colours)
+gg = ggplot(blast_sum_seqs2, aes(y = V2, x = rel_abund))+ facet_grid(.~V1) + geom_bar(stat = "identity", aes(fill = V1), colour = "black") + labs(y = "", x = "Relative abundance (%)", fill = "") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text( colour = "black"), strip.background = element_rect(colour ="black"), axis.text.y = element_text(colour = "black"), legend.position = "none") + scale_x_continuous(expand = c(0,0), limits = c(0, max(blast_sum_seqs2$rel_abund + max(blast_sum_seqs2$rel_abund/10)))) + scale_fill_manual(values = colours)
 gg
 
 #save image
