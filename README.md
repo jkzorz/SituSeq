@@ -11,7 +11,8 @@ Next, there are two options:
 
 # Installation 
 
-### The following downloads are required for all analyses
+#### The following downloads are required for all analyses
+
 **R** 
 Install the R programming language (https://cran.rstudio.com/) 
 
@@ -47,13 +48,13 @@ updateR()
 ```
 
 
-### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
+#### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
 
 To perform [**Stream 1**](https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R), you will additionally need to download a taxonomy database that is compatible with the *assignTaxonomy* function from *dada2*
 The **Silva database** (Select "silva_nr99_v138.1_train_set.fa.gz") is a good option: https://zenodo.org/record/4587955#.YfxAfOrMI2w 
 
 
-### Stream 2: Blast sequences against custom database
+#### Stream 2: Blast sequences against custom database
 
 To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh), you will additionally need to install a local copy of **BLAST**. 
 
