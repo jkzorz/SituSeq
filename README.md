@@ -17,7 +17,7 @@ Next, there are two options:
 
 **RStudio:** Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
 
-**The R packages *tidyverse*, *ShortRead*, and *dada2*:** Install the *dada2*, *ShortRead*, and *tidyverse* packages by copying and pasting the code below
+**The R packages *tidyverse*, *ShortRead*, and *dada2*:** Install these packages by copying and pasting the code below in R
 
 ```
 #install tidyverse
