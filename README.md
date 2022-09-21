@@ -13,17 +13,11 @@ Next, there are two options:
 
 #### The following downloads are required for all analyses
 
-**R** 
+**R:** Install the R programming language (https://cran.rstudio.com/) 
 
-Install the R programming language (https://cran.rstudio.com/) 
+**RStudio:** Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
 
-**RStudio** 
-
-Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
-
-**The R packages *tidyverse*, *ShortRead*, and *dada2* **
-
-Install the *dada2*, *ShortRead*, and *tidyverse* packages by copying and pasting the code below
+**The R packages *tidyverse*, *ShortRead*, and *dada2*:** Install the *dada2*, *ShortRead*, and *tidyverse* packages by copying and pasting the code below
 
 ```
 #install tidyverse
