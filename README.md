@@ -10,7 +10,6 @@ Next, there are two options:
 *SituSeq* was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
 
 # Installation 
-Before running the workflows offline, the following programs need to be installed. 
 
 ### The following downloads are required for all analyses
 **R** 
