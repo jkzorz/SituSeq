@@ -58,9 +58,8 @@ To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream
 If on a Windows system, I also recommend downloading the Windows Subsystem for Linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install).
 If not using a Windows system, skip this step.  
 
-**BLAST+ installation**
-Follow this link and select the option matching your operating system for download (e.g. *win64.exe* for windows):
-https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/
+**BLAST+ installation:** [Follow this link](https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/) and select the option matching your operating system for download (e.g. *win64.exe* for windows):
+
 
 Once downloaded, run the application to finish the installation.
 
