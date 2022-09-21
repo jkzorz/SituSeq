@@ -14,9 +14,11 @@ Next, there are two options:
 #### The following downloads are required for all analyses
 
 **R** 
+
 Install the R programming language (https://cran.rstudio.com/) 
 
 **RStudio** 
+
 Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
 
 **The R packages *tidyverse*, *ShortRead*, and *dada2* **
