@@ -17,7 +17,7 @@ Install the R programming language (https://cran.rstudio.com/)
 **RStudio** 
 Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
 
-**The R packages *dada2*, *tidyverse*, and *ShortRead* **
+**The R packages *tidyverse*, *ShortRead*, and *dada2* **
 
 Install the *dada2*, *ShortRead*, and *tidyverse* packages by copying and pasting the code below
 
@@ -31,11 +31,20 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("ShortRead")
 
 #install dada2 (https://benjjneb.github.io/dada2/dada-installation.html) 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-install.packages("BiocManager")
-BiocManager::install("dada2", version = "3.14")
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("dada2")
 
 ```
+
+The *dada2* package requires R version 4.2 or higher. If you've already installed R, but it is an older version. Use the following code to update: 
+
+```
+install.packages("installr")
+library(installr)
+updateR()
+```
+
 
 ### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
 
