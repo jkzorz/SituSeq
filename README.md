@@ -37,7 +37,7 @@ BiocManager::install("dada2")
 
 ```
 
-The *dada2* package requires R version 4.2 or higher. If you've already installed R, but it is an older version. Use the following code to update: 
+The *dada2* package requires R version 4.2 or higher. If you've already installed R, but it is an older version. Use the following code to update (for windows): 
 
 ```
 install.packages("installr")
