@@ -1,7 +1,7 @@
 # SituSeq
 *SituSeq* is a workflow for the remote and offline analysis of Nanopore-generated 16S rRNA amplicon data. 
 
-The first step is [**Preprocessing**](https://github.com/jkzorz/SituSeq/blob/main/Preprocessing.R) of your raw reads, which includes concatenating files, removing primers, and filtering sequences for length. 
+The first step is [**Preprocessing**](https://github.com/jkzorz/SituSeq/blob/main/Preprocessing.R) of your raw reads, which includes concatenating fastq files, removing primers, and filtering sequences for length. 
 Next, there are two options: 
 - [**Stream 1**](https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R 
 - [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest
