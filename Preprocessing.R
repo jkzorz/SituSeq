@@ -15,8 +15,8 @@ trimRight = 100 #The number of nucleotides to remove from the end of each read. 
 
 ######
 #in R
-#set working directory
-setwd(path_to_working_directory)
+#set working directory if you haven't set it manually
+#setwd(path_to_working_directory)
 
 #load packages (in this order to avoid masking issues)
 library(ShortRead)
