@@ -13,9 +13,9 @@ Next, there are two options:
 
 ### The following downloads are required for all analyses
 
-**R:** Install the R programming language (https://cran.rstudio.com/) 
+**R:** Install the [R programming language](https://cran.rstudio.com/) 
 
-**RStudio:** Install R-Studio, an integrated development environment for easier use of the R language  (https://www.rstudio.com/products/rstudio/download/#download) 
+**RStudio:** Install [R-Studio](https://www.rstudio.com/products/rstudio/download/#download), an integrated development environment for easier use of the R language 
 
 **The R packages *tidyverse*, *ShortRead*, and *dada2*:** Install these packages by copying and pasting the code below in R
 
@@ -48,14 +48,14 @@ updateR()
 
 To perform [**Stream 1**](https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R), you will additionally need to download a taxonomy database that is compatible with the *assignTaxonomy* function from *dada2*.
 
-The **Silva database** (Select "silva_nr99_v138.1_train_set.fa.gz") is a good option: https://zenodo.org/record/4587955#.YfxAfOrMI2w 
+The [**Silva database**](https://zenodo.org/record/4587955#.YfxAfOrMI2w ) (Select "silva_nr99_v138.1_train_set.fa.gz") is a good option.
 
 
 ### Stream 2: Blast sequences against custom database
 
 To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh), you will additionally need to install a local copy of **BLAST**. 
 
-If on a Windows system, I also recommend downloading the Windows Subsystem for Linux (wsl) (https://docs.microsoft.com/en-us/windows/wsl/install).
+If on a Windows system, I also recommend downloading the [Windows Subsystem for Linux (wsl)](https://docs.microsoft.com/en-us/windows/wsl/install).
 If not using a Windows system, skip this step.  
 
 **BLAST+ installation:** [Follow this link](https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/) and select the option matching your operating system for download (e.g. *win64.exe* for windows):
