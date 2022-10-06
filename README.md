@@ -11,7 +11,7 @@ Next, there are two options:
 
 # Installation 
 
-### The following downloads are required for all analyses
+### The following downloads are required for all analyses (Preprocessing, Stream1, and Stream2)
 
 **R:** Install the [R programming language](https://cran.rstudio.com/) 
 
