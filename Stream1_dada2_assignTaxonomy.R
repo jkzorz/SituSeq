@@ -1,15 +1,15 @@
-##This code is meant to be run after running the Preproccessing.R code on your raw fastq files. After the Preprocessing.R code you will have filtered and trimmed fastq files for each sample in your analysis.
+##This code is meant to be run after completing the Preproccessing.R code on your raw fastq files. After the Preprocessing.R code you will have filtered and trimmed fastq files for each sample in your analysis.
 ##This code can be copied and pasted directly into R to assign taxonomy to full length 16S rRNA reads sequenced using the Nanopore MinION platform and 16S barcode kit.
-##The working directory folder should be set to the folder containing subfolders of fastq files from each barcoded sample. E.g From the Nanopore default output, the "fastq_pass" folder would be the working directory
+##The working directory folder should be set to the folder containing subfolders of fastq files from each barcoded sample. E.g From the Nanopore default output, the "fastq_pass" folder would be the working directory (same as for the Preprocessing step)
 ##You can change the parameters in the following section before running the code 
 
 
 ######
 #parameters to set before running
-subsample_depth = 1000 #each sample will be randomly subsampled to this number of reads, prior to taxonomic assignment (after filtering and trimming). For no subsampling see Nanopore_no_rarefaction.R
+subsample_depth = 1000 #each sample will be randomly subsampled to this number of reads, prior to taxonomic assignment (after filtering and trimming). For no subsampling see Nanopore_no_rarefaction.R under "backups" 
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
 sample_number = 12
-path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy database to working directory)
+path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy taxonomy database to working directory)
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
 ######
 
