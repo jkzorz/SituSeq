@@ -53,7 +53,7 @@ The [**Silva database**](https://zenodo.org/record/4587955#.YfxAfOrMI2w ) (Selec
 
 ### Stream 2: Blast sequences against custom database
 
-To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh), you will additionally need to install a local copy of **BLAST**. 
+To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh), you will need to install a local copy of **BLAST**. 
 
 If on a Windows system, I also recommend downloading the [Windows Subsystem for Linux (wsl)](https://docs.microsoft.com/en-us/windows/wsl/install).
 If not using a Windows system, skip this step.  
