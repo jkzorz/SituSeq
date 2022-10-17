@@ -1,5 +1,5 @@
 ##This code can be copied and pasted directly into R to concatenate, filter, and trim Nanopore 16S rRNA gene sequences. 
-##The working directory folder should be set to the folder containing subfolders of fastq files from each barcoded sample. E.g From the Nanopore default output, the "fastq_pass" folder would be the working directory
+##The working directory folder should be set to the folder containing the subfolders of fastq files from each barcoded sample. E.g From the Nanopore default output, the "fastq_pass" folder would be the working directory
 ##Each subdirectory should start with "barcode". If you would like to add extra identifying text, please add it to the subdirectory with an underscore after "barcode". E.g. "barcode01_sample1" 
 ##You can change the parameters in the following section before running the code 
 
