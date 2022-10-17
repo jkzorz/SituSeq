@@ -5,7 +5,7 @@
 
 Next, there are two options: 
 - [**Stream 1**](https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R 
-- [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest
+- [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method requires R and local BLAST
 
 *SituSeq* was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
 
