@@ -25,10 +25,8 @@ cat header_* > NanoporeSeqs.fasta
 makeblastdb -in seqs.fasta -out seqs_DB -dbtype nucl
 
 #run BLAST of Nanopore 16S rRNA sequences against the custom database. The cutoff here is 97% identity, but can be changed 
-#note that 1 max_target_seqs is not recommended when the user is interested in the "best" hit 
-#as the blast algorithm only reports the first hit that matches the requirements, which may or may not be the "best" hit.
-#For this analysis, we are interested in counting the number of hits above 97% to our sequences of interest per sample, 
-#and so it does not specifically matter if the hit that is returned for a given search is the "best" hit.
+#note that 1 max_target_seqs is not recommended when the user is interested in the "best" hit as the blast algorithm only reports the first hit that matches the requirements, which may or may not be the "best" hit.
+#For this analysis, we are interested in counting the number of hits above 97% to our sequences of interest per sample, and so it does not specifically matter if the hit that is returned for a given search is the "best" hit.
 #If using this code for a different purpose keep this in mind and change the -max_target_seqs parameter accordingly
 
 blastn -query filtered/NanoporeSeqs.fasta -db seqs_DB -outfmt 6 -out blast_results.tbl -max_target_seqs 1 -perc_identity 97
