@@ -1,6 +1,7 @@
 ##This code is meant to be run after completing the Preproccessing.R code on your raw fastq files. After the Preprocessing.R code you will have filtered and trimmed fastq files for each sample in your analysis.
 ##This code can be copied and pasted directly into R to assign taxonomy to full length 16S rRNA reads sequenced using the Nanopore MinION platform and 16S barcode kit.
 ##The working directory folder should be set to the folder containing subfolders of fastq files from each barcoded sample. E.g From the Nanopore default output, the "fastq_pass" folder would be the working directory (same as for the Preprocessing step)
+##The end result of this code will be a bubble plot with abundance of all taxa, and a bar plot with the abundance of the top 10 taxa per sample 
 ##You can change the parameters in the following section before running the code 
 
 
