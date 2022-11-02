@@ -29,7 +29,7 @@ folders <- list.files(pattern = "barcode" )
 
 for (directory in folders) {
 print(directory) 
-files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq.gz") 
+files = list.files(path = paste(directory, "/", sep = ""), pattern = ".fastq*") 
 print(files)
 fout = file.path(paste(directory, "combined.fastq.gz", sep = "_"))
     for (fl in files) {
