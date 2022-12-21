@@ -28,7 +28,7 @@ k = list.files(pattern = "_filt.fastq", full.names = TRUE)
 for (fq in k) {
   fq2 = basename(fq)
   fa = gsub("fastq", "fasta",fq2)
-  sample = gsub("_filt.fastq", "", fq2)
+  sample = gsub("_combined_filt.fastq", "", fq2)
   print(fq2)
   writeFasta(readFastq(fq), fa)
   seq <- readDNAStringSet(fa)
