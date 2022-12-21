@@ -35,7 +35,7 @@ for (fq in k) {
 }
 
 #concatenate fasta files together into "All_combined_seqs.fasta"
-m <- list.files(setwd("filtered"), pattern = "_filt.fasta" )
+m <- list.files(pattern = "_filt.fasta" )
 for (fa in m) {
   print(fa) 
   fout = file.path("All_combined_seqs.fasta")
