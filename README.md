@@ -63,3 +63,13 @@ If not using a Windows system, skip this step.
 
 Once downloaded, run the application to finish the installation.
 
+For R-only analysis: Need to install **rBLAST**
+```
+if (!require("BiocManager", quietly = TRUE))
+  +     install.packages("BiocManager")
+
+BiocManager::install("Biostrings")
+install.packages('rBLAST', repos = 'https://mhahsler.r-universe.dev')
+```
+
+
