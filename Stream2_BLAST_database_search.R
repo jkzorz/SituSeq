@@ -17,6 +17,8 @@ library('rBLAST')
 library(ShortRead)
 library(tidyverse)
 
+#set working directory
+setwd(path_to_working_directory)
 
 #create fasta files from filtered fastq files, and change headers to contain sample names
 k = list.files(setwd("filtered"), pattern = "_filt.fastq", full.names = TRUE)
