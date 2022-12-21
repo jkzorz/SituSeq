@@ -105,7 +105,7 @@ ggsave("Blast_hits_per_sample_and sequence.png", height = 8, width = 7)
 library(tidyverse)
 
 #load blast results table 
-blast = read.csv("blast_results.tbl", sep = "\t", header = FALSE)
+blast = read.csv("blast_results.csv", header = FALSE)
 
 #filter out hits that are smaller than expected size
 blast_hq = blast %>% filter(V4 > 400)
