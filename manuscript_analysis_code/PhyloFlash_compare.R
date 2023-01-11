@@ -105,11 +105,13 @@ gg = ggplot(tax_comb8, aes(x = PF, y = nano))+ geom_abline(intercept = 0, slope 
 
 
 cor(tax_comb8$PF, tax_comb8$illumina, method = "pearson")
+#0.9692736
 
 cor(tax_comb8$PF, tax_comb8$nano, method = "pearson")
+#0.8759205
 
 cor(tax_comb8$nano, tax_comb8$illumina, method = "pearson")
-
+#0.8830448
 
 ####
 tax_comb3 = tax_comb8
