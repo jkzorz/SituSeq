@@ -65,6 +65,9 @@ for (i in 1:length(temp)) {
 #merge all data frames in list
 tax_df = temp_list %>% reduce(full_join, by=taxonomic_level)
 
+#remove "_combined" from sample name
+colnames(tax_df) = gsub("_combined","",colnames(tax_df))
+
 #write summary csv of taxonomic level 
 write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"), row.names = FALSE)
 
@@ -74,8 +77,6 @@ tax_df_long = tax_df %>% pivot_longer(!taxonomic_level, names_to = "Sample", val
 #colour scheme for bubble plot
 colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
 
-#remove "_combined" from sample name
-tax_df_long$Sample = gsub("_combined","",tax_df_long$Sample)
 
 #bubble plot
 xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(get(taxonomic_level), desc(get(taxonomic_level))))) + geom_point(aes(colour = Sample, size= Abundance), alpha = 0.7) +theme(legend.key = element_blank(), legend.title = element_text(size = 10), panel.border = element_rect(fill = NA, colour = "grey80"), axis.text.y = element_text(size = 7), axis.text.x = element_text(size = 7, angle = 90, vjust = 0.3, hjust =1), panel.background = element_blank(), panel.grid.major = element_line(colour = "grey94")) + scale_radius(range=c(1,8), breaks = c(1,10,30,50)) + labs(x = "", y = "", colour = taxonomic_level) + scale_colour_manual(values = colours) + guides(colour = "none")
