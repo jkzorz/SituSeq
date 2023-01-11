@@ -66,7 +66,7 @@ for (i in 1:length(temp)) {
 tax_df = temp_list %>% reduce(full_join, by=taxonomic_level)
 
 #write summary csv of taxonomic level 
-write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"))
+write.csv(tax_df, paste0(taxonomic_level,"_summary.csv"), row.names = FALSE)
 
 #convert data to long format
 tax_df_long = tax_df %>% pivot_longer(!taxonomic_level, names_to = "Sample", values_to = "Abundance")
