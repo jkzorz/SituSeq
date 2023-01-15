@@ -1,10 +1,17 @@
-###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
+###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest using command line
 #This code is meant to work on the combined, filtered and trimmed sequences generated from the Preproccessing.R code. 
 #The filtered and trimmed sequences should be found in the directory "filtered" 
 #The end result of this code is a figure with the number of hits or percent abundance of the sequences of interest per sample 
 #There is an option for absolute number of hits or percent abundance using the number of reads per sample
 #There is also an option to sum the hits of all the sequences of interest, or to show the abundance of each sequence separately in each sample
 
+#Notes on installation:
+#If on a Windows system, I also recommend downloading the [Windows Subsystem for Linux (wsl)](https://docs.microsoft.com/en-us/windows/wsl/install). If not using a Windows system, skip this step.  
+
+# **BLAST+ installation:** [Follow this link](https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/) and select the option matching your operating system for download (e.g. *win64.exe* for windows):
+#Once downloaded, run the application to finish the installation.
+
+######################################################################
 
 #open your command line program (e.g. wsl in windows, Terminal on a mac or a linux system) 
 
