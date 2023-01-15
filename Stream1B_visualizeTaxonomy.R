@@ -53,7 +53,7 @@ xx = ggplot(tax_df_long, aes(x = Sample, y = reorder(get(taxonomic_level), desc(
 xx
 
 #save bubble plot
-ggsave(paste0("bubble_plot_",taxonomic_level,".png"), height = 6, width = 5.5)
+ggsave(paste0("bubble_plot_",taxonomic_level,".png"), height = 9, width = 5.5)
 
 #select top 10 most abundant taxa, based on maximum abundance in data set
 tax_df$max = apply(tax_df[,2:ncol(tax_df)], 1, FUN = max, na.rm = TRUE)
