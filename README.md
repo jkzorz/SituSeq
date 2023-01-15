@@ -4,7 +4,7 @@
 - [**Preprocessing**](https://github.com/jkzorz/SituSeq/blob/main/Preprocessing.R): The first step of the workflow is to preprocess your raw reads, which includes concatenating fastq files, removing primers, and filtering sequences for length. Preprocessing only requires R. 
 
 Next, there are two options: 
-- [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R. Also use [Stream1B](https://github.com/jkzorz/SituSeq/blob/main/Stream1B_visualizeTaxonomy.R) for summary and visualization of the taxonomic classification.  
+- [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R. Use [Stream1B](https://github.com/jkzorz/SituSeq/blob/main/Stream1B_visualizeTaxonomy.R) for summary and visualization of the taxonomic classification.  
 - [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2_BLAST_database_search.R): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method only requires R.
 
 *SituSeq* was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
