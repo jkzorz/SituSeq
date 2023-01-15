@@ -7,10 +7,8 @@
 
 ######
 #parameters to set before running
-subsample_depth = 1000 #each sample will be randomly subsampled to this number of reads, prior to taxonomic assignment (after filtering and trimming). For no subsampling see Nanopore_no_rarefaction.R under "backups" 
 taxonomic_level = "Phylum" #choose from "Phylum" "Class" "Order" "Family" "Genus" 
 sample_number = 12
-path_to_taxonomy_database = "silva_nr99_v138.1_train_set.fa.gz" #change to location of taxonomy database in relation to working directory (easiest to copy taxonomy database to working directory)
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
 ######
 
@@ -18,9 +16,7 @@ path_to_working_directory = "." #leave as a "." if you want to set your working 
 #set working directory 
 setwd(path_to_working_directory)
 
-#load packages in this order to avoid masking issues
-library(ShortRead)
-library(dada2)
+#load tidyverse package
 library(tidyverse)
 
 
