@@ -46,24 +46,15 @@ updateR()
 
 ### Stream 1: Assign taxonomy using standard 16S database (e.g. Silva)
 
-To perform [**Stream 1**](https://github.com/jkzorz/Seaquencing/blob/main/Stream1_dada2_assignTaxonomy.R), you will additionally need to download a taxonomy database that is compatible with the *assignTaxonomy* function from *dada2*.
+To perform [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_assignTaxonomy.R), you will additionally need to download a taxonomy database that is compatible with the *assignTaxonomy* function from *dada2*.
 
 The [**Silva database**](https://zenodo.org/record/4587955#.YfxAfOrMI2w ) (Select "silva_nr99_v138.1_train_set.fa.gz") is a good option.
 
 
 ### Stream 2: Blast sequences against custom database
 
-To perform [**Stream 2**](https://github.com/jkzorz/Seaquencing/blob/main/Stream2_blast_database.sh), you will need to install a local copy of **BLAST**. 
+To perform [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2_BLAST_database_search.R), you will need to install **rBLAST**
 
-If on a Windows system, I also recommend downloading the [Windows Subsystem for Linux (wsl)](https://docs.microsoft.com/en-us/windows/wsl/install).
-If not using a Windows system, skip this step.  
-
-**BLAST+ installation:** [Follow this link](https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/) and select the option matching your operating system for download (e.g. *win64.exe* for windows):
-
-
-Once downloaded, run the application to finish the installation.
-
-For R-only analysis: Need to install **rBLAST**
 ```
 if (!require("BiocManager", quietly = TRUE))
   +     install.packages("BiocManager")
