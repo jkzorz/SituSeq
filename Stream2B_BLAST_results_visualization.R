@@ -10,6 +10,7 @@
 #parameters to set before running:
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
 sample_number = 12 #number of samples 
+perc_identity = 97 #percent identity cutoff 
 alignment_length = 400 #minimum length of alignment between Nanopore sequence and database sequence to keep 
 e_value = 0.01 #maximum e-value of BLAST match to keep
 #######
@@ -28,11 +29,8 @@ library(tidyverse)
 #load blast results table 
 blast = read.csv("blast_results.csv",  header = FALSE)
 
-#filter out hits that are smaller than expected size
-blast_hq = blast %>% filter(V4 > alignment_length)
-
-#or filter out hits less than a certain e-value 
-blast_hq = blast %>% filter(V11 <= e_value)
+#filter out hits that are below the percent identity cutoff, smaller than the expected size, and greater than a certain e-value
+blast_hq = blast %>% filter(V3 > perc_identity) %>% filter(V4 > alignment_length) %>% filter(V11 <= e_value)
 
 #count the number of high quality hits per sample 
 blast_sum = blast_hq %>% group_by(V1) %>% summarize(n = n())
