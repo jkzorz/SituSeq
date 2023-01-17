@@ -10,9 +10,6 @@
 #parameters to set before running:
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
 path_to_seqs4_BLAST_db = "BLAST_DB.fasta" #change to file name and location of sequences to use for BLAST database
-#to add: 
-#perc identity cutoff for blast
-#number of samples
 ######
 
 #load packages
@@ -53,6 +50,6 @@ seq <- readDNAStringSet("All_combined_seqs.fasta")
 makeblastdb(path_to_seqs4_BLAST_db, dbtype = "nucl")
 dbb <- blast(db=path_to_seqs4_BLAST_db)
 #change parameters here as required
-results = predict(dbb, seq, BLAST_args= c("-max_target_seqs 1", "-perc_identity 97"))
+results = predict(dbb, seq, BLAST_args= c("-max_target_seqs 1"))
 write.csv(results, "blast_results.csv", row.names = FALSE)
 
