@@ -9,6 +9,7 @@
 ######
 #parameters to set before running:
 path_to_working_directory = "." #leave as a "." if you want to set your working directory manually in RStudio "Session"--> "Set Directory" --> "Choose Directory"
+sample_number = 12 #number of samples 
 alignment_length = 400 #minimum length of alignment between Nanopore sequence and database sequence to keep 
 e_value = 0.01 #maximum e-value of BLAST match to keep
 #######
@@ -38,7 +39,7 @@ blast_sum = blast_hq %>% group_by(V1) %>% summarize(n = n())
 
 #plot the number of high quality hits per sample as bar plot
 #colour scheme, change according to number of samples and desired colours
-colours = c("#2F4858","#68AC5D", "#830689", "#C1D7AE",   "#86BBD8",  "#F5A614","#33658A",  "#BB3551",  "#F26419",  "#EBDDAD")
+colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
 
 #bar plot
 gg = ggplot(blast_sum, aes(y = V1, x = n)) + geom_bar(stat = "identity", aes(fill = V1), colour = "black") + labs(y = "", x = "Number of hits to sequences of interest", fill = "") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text( colour = "black"), axis.text.y = element_text(colour = "black"), legend.position = "none") + scale_x_continuous(expand = c(0,0), limits = c(0, max(blast_sum$n + max(blast_sum$n/10)))) + scale_fill_manual(values = colours)
