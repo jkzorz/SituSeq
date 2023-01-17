@@ -5,7 +5,7 @@
 
 Next, there are two options: 
 - [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R. Use [Stream1B](https://github.com/jkzorz/SituSeq/blob/main/Stream1B_visualizeTaxonomy.R) for summary and visualization of the taxonomic classification.  
-- [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2A_BLAST_database_search.R): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method only requires R. Use [Stream 2B](https://github.com/jkzorz/SituSeq/blob/main/Stream2B_BLAST_results_visualization.R) for summary and visualization of the BLAST results. 
+- [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2A_BLAST_database_search.R): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method only requires R. Use [Stream 2B](https://github.com/jkzorz/SituSeq/blob/main/Stream2B_BLAST_results_visualization.R) for summary and visualization of the BLAST results.  **Note that the Stream 2A BLAST search can not be run from a path (list of directories leading to your working directory) that contains any space characters** 
 
 *SituSeq* was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
 
@@ -62,5 +62,5 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("Biostrings")
 install.packages('rBLAST', repos = 'https://mhahsler.r-universe.dev')
 ```
-
+**Note that the Stream 2A BLAST search can not be run from a path (list of directories leading to your working directory) that contains any space characters** 
 
