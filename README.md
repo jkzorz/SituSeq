@@ -5,7 +5,7 @@
 
 Next, there are two options: 
 - [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_assignTaxonomy.R): Assign taxonomy to 16S rRNA amplicon data. This method only requires R. Use [Stream1B](https://github.com/jkzorz/SituSeq/blob/main/Stream1B_visualizeTaxonomy.R) for summary and visualization of the taxonomic classification.  
-- [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2_BLAST_database_search.R): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method only requires R.
+- [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2A_BLAST_database_search.R): Perform a BLAST search of your Nanopore sequences against a custom built database containing sequences of interest. This method only requires R. Use [Stream 2B](https://github.com/jkzorz/SituSeq/blob/main/Stream2B_BLAST_results_visualization.R) for summary and visualization of the BLAST results. 
 
 *SituSeq* was designed to be implemented by researchers with any level of bioinformatics experience using a standard spec laptop. All you have to do is copy and paste the code!  
 
@@ -53,7 +53,7 @@ The [**Silva database**](https://zenodo.org/record/4587955#.YfxAfOrMI2w ) (Selec
 
 ### Stream 2: BLAST sequences against custom database
 
-To perform [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2_BLAST_database_search.R), you will need to install **rBLAST**
+To perform [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2A_BLAST_database_search.R), you will need to install **rBLAST**
 
 ```
 if (!require("BiocManager", quietly = TRUE))
