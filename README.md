@@ -51,7 +51,7 @@ To perform [**Stream 1**](https://github.com/jkzorz/SituSeq/blob/main/Stream1A_a
 The [**Silva database**](https://zenodo.org/record/4587955#.YfxAfOrMI2w ) (Select "silva_nr99_v138.1_train_set.fa.gz") is a good option.
 
 
-### Stream 2: Blast sequences against custom database
+### Stream 2: BLAST sequences against custom database
 
 To perform [**Stream 2**](https://github.com/jkzorz/SituSeq/blob/main/Stream2_BLAST_database_search.R), you will need to install **rBLAST**
 
