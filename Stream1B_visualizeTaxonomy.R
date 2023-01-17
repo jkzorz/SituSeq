@@ -68,7 +68,7 @@ tax_df2_long = tax_df2 %>% select(-max) %>% pivot_longer(!taxonomic_level, names
 #remove "_combined" from sample name
 tax_df2_long$Sample = gsub("_combined","",tax_df2_long$Sample)
 
-#bar plot of most abundant phyla
+#bar plot of most abundant taxa
 gg = ggplot(tax_df2_long, aes(x = Sample, y = Abundance)) + geom_bar(aes(fill = get(taxonomic_level)), colour = "black", position = "stack", stat = "identity") + scale_fill_manual(values = colours) + labs(x = "", y = "Relative Abundance (%)", fill = taxonomic_level) + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.3), legend.key = element_blank()) + scale_y_continuous(limits = c(0,100), expand = c(0,0))
 gg
 
