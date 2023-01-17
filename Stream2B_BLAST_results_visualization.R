@@ -36,7 +36,7 @@ blast_hq = blast %>% filter(V3 > perc_identity) %>% filter(V4 > alignment_length
 blast_sum = blast_hq %>% group_by(V1) %>% summarize(n = n())
 
 #plot the number of high quality hits per sample as bar plot
-#colour scheme, change according to number of samples and desired colours
+#colour scheme
 colours = colorRampPalette(c("#2F4858", "#33658A", "#86BBD8", "#830689", "#F5A614", "#F26419", "#BB3551",  "#C1D7AE", "#68AC5D", "#EBDDAD"))(sample_number)
 
 #bar plot
@@ -61,23 +61,6 @@ ggsave("Blast_hits_per_sample_and sequence.png", height = 8, width = 7)
 #This code is for calculating relative abundance of hits
 #You will need the Filtered_sequence_summary.csv file from the Preprocessing.R script filterAndTrim step
 
-#open R and set your working directory
-#e.g. setwd("~/My_working_directory")
-
-#load tidyverse library
-library(tidyverse)
-
-#load blast results table 
-blast = read.csv("blast_results.csv", header = FALSE)
-
-#filter out hits that are smaller than expected size
-blast_hq = blast %>% filter(V4 > 400)
-
-#or filter out hits less than a certain e-value 
-blast_hq = blast %>% filter(V11 <= 0)
-
-#Count the number of high quality hits per sample 
-blast_sum = blast_hq %>% group_by(V1) %>% summarize(n = n())
 
 #load in Filtered_sequence_summary.csv file from the Stream 1 Filter and Trim step
 filt = read.csv("Filtered_sequence_summary.csv")
@@ -95,8 +78,6 @@ blast_sum2 = full_join(blast_sum, filt2, "V1")
 blast_sum2$rel_abund = (blast_sum2$n/blast_sum2$num_seqs)*100
 
 #plot relative abundance of sequences of interest per sample as a bar plot
-#colour scheme, change according to number of samples and desired colours
-colours = c("#2F4858","#68AC5D", "#830689", "#C1D7AE",   "#86BBD8",  "#F5A614","#33658A",  "#BB3551",  "#F26419",  "#EBDDAD")
 
 gg = ggplot(blast_sum2, aes(y = V1, x = rel_abund)) + geom_bar(stat = "identity", aes(fill = V1), colour = "black") + labs(y = "", x = "Relative abundance (%) of sequences of interest", fill = "") + theme(panel.background = element_blank(), panel.border = element_rect(fill =NA, colour = "black"), axis.text.x = element_text( colour = "black"), axis.text.y = element_text(colour = "black"), legend.position = "none") + scale_x_continuous(expand = c(0,0), limits = c(0, max(blast_sum2$rel_abund + max(blast_sum2$rel_abund/10)))) + scale_fill_manual(values = colours)
 gg
