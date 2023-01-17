@@ -1,4 +1,5 @@
 ###SituSeq Stream2: Search Nanopore 16S rRNA sequences against a custom database of sequences of interest
+#Note that the Stream 2A BLAST search can not be run from a path (list of directories leading to your working directory) that contains any space characters
 #This code is meant to work on the combined, filtered and trimmed sequences generated from the Preproccessing.R code. 
 #The filtered and trimmed sequences should be found in the directory "filtered" 
 #The end result of this code is a table with BLAST search results 
