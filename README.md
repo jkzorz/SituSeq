@@ -64,3 +64,14 @@ install.packages('rBLAST', repos = 'https://mhahsler.r-universe.dev')
 ```
 **Note that the Stream 2A BLAST search can not be run from a path (list of directories leading to your working directory) that contains any space characters** 
 
+
+### Practice data 
+
+Practice data arranged in the same file format that is produced from the Nanopore MinION, and which can be directly fed into the SituSeq pipeline can be found [**here in the data directory**](https://github.com/jkzorz/SituSeq/tree/main/data)
+
+The file [**Nanopore_SRA_metadata.csv**](https://github.com/jkzorz/SituSeq/blob/main/data/Nanopore_SRA_metadata.csv) contains the SRA accession and corresponding barcode/library IDs for all Nanopore samples used in the [**SituSeq manuscript**](https://www.nature.com/articles/s43705-023-00239-3) 
+
+### Citation
+
+Please cite the [**SituSeq manuscript**](https://www.nature.com/articles/s43705-023-00239-3)
+
