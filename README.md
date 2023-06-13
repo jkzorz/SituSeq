@@ -73,5 +73,6 @@ The file [**Nanopore_SRA_metadata.csv**](https://github.com/jkzorz/SituSeq/blob/
 
 ### Citation
 
-Please cite the [**SituSeq manuscript**](https://www.nature.com/articles/s43705-023-00239-3)
+Please cite the [**SituSeq manuscript**](https://www.nature.com/articles/s43705-023-00239-3):
+Zorz, J., Li, C., Chakraborty, A. et al. SituSeq: an offline protocol for rapid and remote Nanopore 16S rRNA amplicon sequence analysis. ISME COMMUN. 3, 33 (2023). https://doi.org/10.1038/s43705-023-00239-3
 
